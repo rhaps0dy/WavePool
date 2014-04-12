@@ -24,54 +24,54 @@ void Color::operator = (const Vector3& v)
 }
 
 //**************************************
-double Vector2::distance(const Vector2& v)
+Float Vector2::distance(const Vector2& v)
 {
 	return (v - *this).length();
 }
 
-double Vector2::dot( const Vector2& v )
+Float Vector2::dot( const Vector2& v )
 {
 	return x * v.x + y * v.y;
 }
 
-double Vector2::perpdot( const Vector2& v )
+Float Vector2::perpdot( const Vector2& v )
 {
 	return y * v.x + -x * v.y;
 }
 
-void Vector2::random(double range)
+void Vector2::random(Float range)
 {
 	//rand returns a value between 0 and RAND_MAX
-	x = (rand() / (double)RAND_MAX) * 2 * range - range; //value between -range and range
-	y = (rand() / (double)RAND_MAX) * 2 * range - range; //value between -range and range
+	x = (rand() / (Float)RAND_MAX) * 2 * range - range; //value between -range and range
+	y = (rand() / (Float)RAND_MAX) * 2 * range - range; //value between -range and range
 }
 
-Vector2 operator * (const Vector2& a, double v) { return Vector2(a.x * v, a.y * v); }
+Vector2 operator * (const Vector2& a, Float v) { return Vector2(a.x * v, a.y * v); }
 Vector2 operator + (const Vector2& a, const Vector2& b) { return Vector2(a.x + b.x, a.y + b.y); }
 Vector2 operator - (const Vector2& a, const Vector2& b) { return Vector2(a.x - b.x, a.y - b.y); }
 
 // **************************************
 
-double Vector3::length()
+Float Vector3::length()
 {
 	return sqrt(x*x + y*y + z*z);
 }
 
-double Vector3::length() const
+Float Vector3::length() const
 {
 	return sqrt(x*x + y*y + z*z);
 }
 
 Vector3& Vector3::normalize()
 {
-	double len = length();
+	Float len = length();
 	x /= len;
 	y /= len;
 	z /= len;
 	return *this;
 }
 
-double Vector3::distance(const Vector3& v) const
+Float Vector3::distance(const Vector3& v) const
 {
 	return (v - *this).length();
 }
@@ -81,25 +81,25 @@ Vector3 Vector3::cross( const Vector3& b ) const
 	return Vector3(y*b.z - z*b.y, z*b.x - x*b.z, x*b.y - y*b.x);
 }
 
-double Vector3::dot( const Vector3& v ) const
+Float Vector3::dot( const Vector3& v ) const
 {
 	return x*v.x + y*v.y + z*v.z;
 }
 
-void Vector3::random(double range)
+void Vector3::random(Float range)
 {
 	//rand returns a value between 0 and RAND_MAX
-	x = (rand() / (double)RAND_MAX) * 2 * range - range; //value between -range and range
-	y = (rand() / (double)RAND_MAX) * 2 * range - range; //value between -range and range
-	z = (rand() / (double)RAND_MAX) * 2 * range - range; //value between -range and range
+	x = (rand() / (Float)RAND_MAX) * 2 * range - range; //value between -range and range
+	y = (rand() / (Float)RAND_MAX) * 2 * range - range; //value between -range and range
+	z = (rand() / (Float)RAND_MAX) * 2 * range - range; //value between -range and range
 }
 
 void Vector3::random(Vector3 range)
 {
 	//rand returns a value between 0 and RAND_MAX
-	x = (rand() / (double)RAND_MAX) * 2 * range.x - range.x; //value between -range and range
-	y = (rand() / (double)RAND_MAX) * 2 * range.y - range.y; //value between -range and range
-	z = (rand() / (double)RAND_MAX) * 2 * range.z - range.z; //value between -range and range
+	x = (rand() / (Float)RAND_MAX) * 2 * range.x - range.x; //value between -range and range
+	y = (rand() / (Float)RAND_MAX) * 2 * range.y - range.y; //value between -range and range
+	z = (rand() / (Float)RAND_MAX) * 2 * range.z - range.z; //value between -range and range
 }
 
 //*********************************
@@ -122,7 +122,7 @@ void Matrix44::load()
 
 void Matrix44::clear()
 {
-	memset(m, 0, 16*sizeof(double));
+	memset(m, 0, 16*sizeof(Float));
 }
 
 void Matrix44::setIdentity()
@@ -139,14 +139,14 @@ void Matrix44::transpose()
    std::swap(m[6],m[9]); std::swap(m[7],m[13]); std::swap(m[11],m[14]);
 }
 
-void Matrix44::traslate(double x, double y, double z)
+void Matrix44::traslate(Float x, Float y, Float z)
 {
 	Matrix44 T;
 	T.setTranslation(x, y, z);
 	*this = *this * T;
 }
 
-void Matrix44::rotate( double angle_in_rad, const Vector3& axis )
+void Matrix44::rotate( Float angle_in_rad, const Vector3& axis )
 {
 	Matrix44 R;
 	R.setRotation(angle_in_rad, axis);
@@ -162,14 +162,14 @@ Vector3 Matrix44::rotateVector(const Vector3& v)
 	return temp * v;
 }
 
-void Matrix44::traslateLocal(double x, double y, double z)
+void Matrix44::traslateLocal(Float x, Float y, Float z)
 {
 	Matrix44 T;
 	T.setTranslation(x, y, z);
 	*this = T * *this;
 }
 
-void Matrix44::rotateLocal( double angle_in_rad, const Vector3& axis )
+void Matrix44::rotateLocal( Float angle_in_rad, const Vector3& axis )
 {
 	Matrix44 R;
 	R.setRotation(angle_in_rad, axis);
@@ -177,7 +177,7 @@ void Matrix44::rotateLocal( double angle_in_rad, const Vector3& axis )
 }
 
 //To create a traslation matrix
-void Matrix44::setTranslation(double x, double y, double z)
+void Matrix44::setTranslation(Float x, Float y, Float z)
 {
 	setIdentity();
 	m[12] = x;
@@ -186,15 +186,15 @@ void Matrix44::setTranslation(double x, double y, double z)
 }
 
 //To create a rotation matrix
-void Matrix44::setRotation( double angle_in_rad, const Vector3& axis  )
+void Matrix44::setRotation( Float angle_in_rad, const Vector3& axis  )
 {
 	clear();
 	Vector3 axis_n = axis;
 	axis_n.normalize();
 
-	double c = cos( angle_in_rad );
-	double s = sin( angle_in_rad );
-	double t = 1 - c;
+	Float c = cos( angle_in_rad );
+	Float s = sin( angle_in_rad );
+	Float t = 1 - c;
 
 	M[0][0] = t * axis.x * axis.x + c;
 	M[0][1] = t * axis.x * axis.y - s * axis.z;
@@ -222,7 +222,7 @@ Matrix44 Matrix44::getRotationOnly()
 	return trans * inv;
 }
 
-bool Matrix44::getXYZ(double* euler) const
+bool Matrix44::getXYZ(Float* euler) const
 {
 // Code adapted from www.geometrictools.com
 //	Matrix3<Real>::EulerResult Matrix3<Real>::ToEulerAnglesXYZ
@@ -248,7 +248,7 @@ bool Matrix44::getXYZ(double* euler) const
             // y_angle = -pi/2
             // z_angle - x_angle = atan2(r10,r11)
             // WARNING.  The solution is not unique.  Choosing z_angle = 0.
-            euler[1] = (double)-M_PI_2;
+            euler[1] = (Float)-M_PI_2;
             euler[0] = -atan2f(_21,_22);
             euler[2] = 0.0f;
             return false;
@@ -259,7 +259,7 @@ bool Matrix44::getXYZ(double* euler) const
         // y_angle = +pi/2
         // z_angle + x_angle = atan2(r10,r11)
         // WARNING.  The solutions is not unique.  Choosing z_angle = 0.
-        euler[1] = (double)M_PI_2;
+        euler[1] = (Float)M_PI_2;
         euler[0] = atan2f(_21,_22);
         euler[2] = 0.0f;
     }
@@ -297,7 +297,7 @@ Vector3 operator - (const Vector3& a, const Vector3& b)
 	return Vector3(a.x - b.x, a.y - b.y, a.z - b.z );
 }
 
-Vector3 operator * (const Vector3& a, double v)
+Vector3 operator * (const Vector3& a, Float v)
 {
 	return Vector3(a.x * v, a.y * v, a.z * v);
 }
@@ -305,9 +305,9 @@ Vector3 operator * (const Vector3& a, double v)
 //Multiplies a vector by a matrix and returns the new vector
 Vector3 operator * (const Matrix44& matrix, const Vector3& v)
 {
-   double x = matrix.m[0] * v.x + matrix.m[4] * v.y + matrix.m[8] * v.z + matrix.m[12];
-   double y = matrix.m[1] * v.x + matrix.m[5] * v.y + matrix.m[9] * v.z + matrix.m[13];
-   double z = matrix.m[2] * v.x + matrix.m[6] * v.y + matrix.m[10] * v.z + matrix.m[14];
+   Float x = matrix.m[0] * v.x + matrix.m[4] * v.y + matrix.m[8] * v.z + matrix.m[12];
+   Float y = matrix.m[1] * v.x + matrix.m[5] * v.y + matrix.m[9] * v.z + matrix.m[13];
+   Float z = matrix.m[2] * v.x + matrix.m[6] * v.y + matrix.m[10] * v.z + matrix.m[14];
    return Vector3(x,y,z);
 }
 
@@ -387,7 +387,7 @@ void Matrix44::setFrontAndOrthonormalize(Vector3 front)
 bool Matrix44::inverse()
 {
    unsigned int i, j, k, swap;
-   double t;
+   Float t;
    Matrix44 temp, final;
    final.setIdentity();
 
@@ -456,7 +456,7 @@ bool Matrix44::inverse()
    return true;
 }
 
-double ComputeSignedAngle( Vector2 a, Vector2 b)
+Float ComputeSignedAngle( Vector2 a, Vector2 b)
 {
 	a.normalize();
 	b.normalize();
@@ -465,9 +465,9 @@ double ComputeSignedAngle( Vector2 a, Vector2 b)
 
 Vector3 RayPlaneCollision( const Vector3& plane_pos, const Vector3& plane_normal, const Vector3& ray_origin, const Vector3& ray_dir )
 {
-    double D = plane_pos.dot(plane_normal);
-    double numer = plane_normal.dot(ray_origin) + D;
-    double denom = plane_normal.dot(ray_dir);
-    double t = -(numer / denom);
+    Float D = plane_pos.dot(plane_normal);
+    Float numer = plane_normal.dot(ray_origin) + D;
+    Float denom = plane_normal.dot(ray_dir);
+    Float t = -(numer / denom);
 	return ray_origin + ray_dir * t;
 }

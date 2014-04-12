@@ -19,8 +19,5 @@ void launchLoop(Application* app);
 
 void renderImage(Image* img);
 
-inline double _random() { return (rand() % 10000) / 10000.0; }
-
-//save us some typing
-typedef unsigned int uint;
+inline Float _random() { return (rand() % 10000) / 10000.0; }
 #endif

@@ -52,7 +52,7 @@ void Application::render(void)
 }
 
 //called after render
-void Application::update(double seconds_elapsed)
+void Application::update(Float seconds_elapsed)
 {
 	if (keystate[SDL_SCANCODE_SPACE])
 	{

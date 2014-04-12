@@ -14,14 +14,14 @@ class Application
 public:
 	//window
 	SDL_Window* window;
-	double window_width;
-	double window_height;
+	Float window_width;
+	Float window_height;
 
 	//rendering image
 	Image *img;
 
 #ifdef APP_TIME_ENABLED
-	double time;
+	Float time;
 #endif //APP_TIME_ENABLED
 
 	//keyboard state
@@ -39,7 +39,7 @@ public:
 	//main methods
 	void init( void );
 	void render( void );
-	void update( double dt );
+	void update( Float dt );
 
 	//methods for events
 	void onKeyPressed( SDL_KeyboardEvent event );

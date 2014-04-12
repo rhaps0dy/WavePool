@@ -73,7 +73,7 @@ void Image::scale(unsigned int width, unsigned int height)
 
 	for(unsigned int x = 0; x < width; ++x)
 		for(unsigned int y = 0; y < height; ++y)
-			new_pixels[ y * width + x ] = getPixel((unsigned int)(this->width * (x / (double)width)), (unsigned int)(this->height * (y / (double)height)) );
+			new_pixels[ y * width + x ] = getPixel((unsigned int)(this->width * (x / (Float)width)), (unsigned int)(this->height * (y / (Float)height)) );
 
 	delete pixels;
 	this->width = width;
@@ -177,7 +177,7 @@ bool Image::loadTGA(const char* filename)
 	height = tgainfo->height;
 	pixels = new Color[width*height];
 
-	//convert to double all pixels
+	//convert to Float all pixels
 	for(unsigned int y = 0; y < height; ++y)
 		for(unsigned int x = 0; x < width; ++x)
 		{
