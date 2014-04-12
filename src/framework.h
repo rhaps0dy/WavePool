@@ -199,7 +199,11 @@ Vector2 operator + (const Vector2& a, const Vector2& b);
 Vector2 operator - (const Vector2& a, const Vector2& b);
 
 inline Float distance(const Vector2& a, const Vector2& b) { return (Float)(a-b).length(); }
-inline Float distance(Float x, Float y, Float x2, Float y2) { return sqrtf( (x-x2)*(x-x2) + (y-y2)*(y-y2)); }
+#ifdef DOUBLE_PRECISION
+inline double distance(double x, double y, double x2, double y2) { return sqrt( (x-x2)*(x-x2) + (y-y2)*(y-y2)); }
+#else
+inline float distance(float x, float y, float x2, float y2) { return sqrtf( (x-x2)*(x-x2) + (y-y2)*(y-y2)); }
+#endif //DOUBLE_PRECISION
 
 class Vector3u
 {
