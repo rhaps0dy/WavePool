@@ -1,4 +1,4 @@
-#ifndef _emitter_h
+#ifndef _emitter_h_
 #define _emitter_h_
 
 #include "framework.h"
@@ -10,7 +10,7 @@ class Emitter
 {
 private:
 	//all waves move at this speed (px/s)
-	constexpr Float WAVE_SPEED=1000.;
+	static constexpr Float WAVE_SPEED=1000.;
 	//origin of the wave
 	Vector2 mPos;
 	//amplitude of the wave
@@ -20,7 +20,7 @@ private:
 	//accumulated time (s)
 	Float mTimeAcc;
 	//period of the sine wave (s)
-	const Float mPeriod;
+	Float mPeriod;
 
 public:
 	inline void setAmp(Float a) { mAmp = a; }

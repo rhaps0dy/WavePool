@@ -8,6 +8,7 @@
 #include "includes.h"
 #include "framework.h"
 #include "image.h"
+#include "wavepool.h"
 
 class Application
 {
@@ -17,8 +18,8 @@ public:
 	Float window_width;
 	Float window_height;
 
-	//rendering image
-	Image *img;
+	//world renderer
+	WavePool *wp;
 
 #ifdef APP_TIME_ENABLED
 	Float time;
@@ -39,7 +40,7 @@ public:
 	//main methods
 	void init( void );
 	void render( void );
-	void update( Float dt );
+	void update( Float seconds_elapsed );
 
 	//methods for events
 	void onKeyPressed( SDL_KeyboardEvent event );

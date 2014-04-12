@@ -20,12 +20,12 @@ Application::Application(const char* caption, int width, int height)
 //Here we have already GL working, so we can create meshes and textures
 void Application::init(void)
 {
-	img = new Image(window_width, window_height);
+	wp = new WavePool(window_width, window_height);
 }
 
 Application::~Application()
 {
-	delete img;
+	delete wp;
 }
 
 //render one frame
@@ -34,18 +34,7 @@ void Application::render(void)
 	// Clear the window and the depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	for(unsigned int x = 0; x < img->width; x++)
-		for(unsigned int y = 0; y < img->height; y++)
-		{
-			if( x % 100 == 0 || y % 100 == 0 )
-				img->setPixel(x,y, Color::WHITE );
-			else if( x % 25 == 0 || y % 25 == 0 )
-				img->setPixel(x,y, Color::GRAY);
-		}
-
-	img->scale( this->window_width, this->window_height );
-
-	renderImage( img );
+	renderImage(wp->getNewImage());
 
 	//swap between front buffer and back buffer
 	SDL_GL_SwapWindow(this->window);
@@ -58,6 +47,7 @@ void Application::update(Float seconds_elapsed)
 	{
 		//...
 	}
+	wp->update(seconds_elapsed);
 }
 
 //keyboard press event
