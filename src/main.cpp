@@ -13,7 +13,7 @@
 int main(int argc, char **argv)
 {
 	//launch the app (app is a global variable)
-	Application* app = new Application( "Waves", 800, 600 );
+	Application* app = new Application( "WavePool", 800, 600 );
 	app->init();
 	app->start();
 	delete app;

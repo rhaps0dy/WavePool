@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(Infografia2014)
+project(WavePool)
 
 #CXXFLAGS
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
