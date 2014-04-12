@@ -14,16 +14,14 @@
 //SDL
 #pragma comment(lib, "SDL2.lib")
 #pragma comment(lib, "SDL2main.lib")
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
+#include <SDL.h>
+#include <SDL_opengl.h>
 
 //GLUT
-#ifdef WIN32
-	#include <GL/glut.h>
-#endif
-
 #ifdef __APPLE__
 	#include <GLUT/glut.h>
+#else
+	#include <GL/glut.h>
 #endif
 
 #include <iostream>
