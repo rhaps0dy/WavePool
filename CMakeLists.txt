@@ -2,7 +2,13 @@ cmake_minimum_required(VERSION 2.8)
 
 project(Infografia2014)
 
-# Troba el fitxer de configuracio de SDL2
+#CXXFLAGS
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g")
+add_definitions("-std=c++11 -DDOUBLE_PRECISION")
+
+# Find the SDL2 configuration file
 set(SDL2_DIR ${CMAKE_SOURCE_DIR})
 
 find_package(OpenGL REQUIRED)

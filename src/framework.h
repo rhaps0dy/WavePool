@@ -21,7 +21,7 @@ typedef float Float;
 #endif //DOUBLE_PRECISION
 
 //save us some typing
-typedef unsigned int uint;
+typedef unsigned int Uint;
 
 //clamp a value 'x' between 'a' and 'b'
 inline Float clamp(Float x, Float a, Float b) { return x < a ? a : (x > b ? b : x); }
