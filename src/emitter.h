@@ -24,10 +24,10 @@ private:
 	Uint mWCacheLen;
 	//2*mWCacheLen
 	Uint mWCacheLen_2;
+	//pixel distance cache
 
-
-public:
 	void renewCache();
+public:
 	inline Uint getAmp() { return mAmp; }
 	inline Uint getWLen() { return mWLen/1000; }
 	inline Uint getSpeed() { return mSpeed; }
@@ -41,11 +41,13 @@ public:
 	inline Uint getX() { return mPos.x; }
 	inline Uint getY() { return mPos.y; }
 
-	Emitter(Uint a, Uint l, Uint s, Uint x, Uint y);
-	~Emitter();
+	//for arrays
+	void init(Uint a, Uint l, Uint s, Uint x, Uint y, Uint w, Uint h);
+	void destroy();
 
 	inline void addTime(Uint dt) { mTimeAcc = (dt*mSpeed+mTimeAcc)%mWLen; }
 	int8_t calcWave(Uint x, Uint y);
+	void resize(Uint w, Uint h);
 };
 
 #endif //_emitter_h_

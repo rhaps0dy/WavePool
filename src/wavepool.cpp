@@ -1,27 +1,25 @@
 #include "wavepool.h"
-#include <cstdlib>
 
 WavePool::WavePool(Uint w, Uint h) :
-	img(w, h), mWidth(w), mHeight(h),
-	mNumEmitters(1), mEmitters(NULL)
+	img(w, h), mWidth(w), mHeight(h), mNumEmitters(1)
 {
-	mEmitters = (Emitter *)malloc(mNumEmitters*sizeof(Emitter));
-	mEmitters[0] = Emitter(127, 100, 100, 100, 100);
+	mEmitters = new Emitter[mNumEmitters];
+	mEmitters[0].init(127, 100, 100, 100, 100, w, h);
 //	mEmitters[1] = Emitter(255./4., 200., 25., 500., 500.);
 }
 
 WavePool::~WavePool()
 {
-	free(mEmitters);
+	for(Uint i=0; i<mNumEmitters; i++)
+		mEmitters[i].destroy();
+	delete[] mEmitters;
 }
 
 Image *WavePool::getNewImage()
 {
 	Uint iy, ix, i;
 	Color c;
-	Float sum;
-
-	mEmitters[0].renewCache();
+	int8_t sum;
 
 	#pragma omp parallel for default(shared) private(iy, ix, i, c, sum)
 	for(iy=0; iy<mHeight; iy++)

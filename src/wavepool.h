@@ -5,6 +5,8 @@
 #include "framework.h"
 #include "image.h"
 
+#include <vector>
+
 class WavePool
 {
 private:

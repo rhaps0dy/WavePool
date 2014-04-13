@@ -2,21 +2,28 @@
 #include <cstdlib>
 #include <cstdio>
 
-Emitter::Emitter(Uint a, Uint l, Uint s, Uint x, Uint y) :
-	mAmp(a), mWLen(l*1000), mSpeed(s), mPos(x, y), mTimeAcc(0), mWCache(NULL)
+void Emitter::init(Uint a, Uint l, Uint s, Uint x, Uint y, Uint w, Uint h)
 {
+	mAmp = a;
+	mWLen = l*1000;
+	mSpeed = s;
+	mPos.x = x;
+	mPos.y = y;
+	mTimeAcc = 0;
+
 	renewCache();
+	resize(w, h);
 }
 
-Emitter::~Emitter()
+void Emitter::destroy()
 {
-	free(mWCache);
+	if(mWCache) free(mWCache);
 }
 
 void Emitter::renewCache()
 {
 	mWCacheLen = getWLen()/2;
-	if(mWCache==NULL) free(mWCache);
+	if(mWCache) free(mWCache);
 	mWCache = (int8_t *) malloc(mWCacheLen*sizeof(int8_t));
 	Float step = PI/((Float)mWCacheLen);
 	Float res;
@@ -66,3 +73,6 @@ int8_t Emitter::calcWave(Uint x, Uint y)
 	return mWCache[root];
 }
 
+void Emitter::resize(Uint w, Uint h)
+{
+}
