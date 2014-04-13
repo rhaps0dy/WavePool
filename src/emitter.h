@@ -45,7 +45,7 @@ public:
 	~Emitter();
 
 	inline void addTime(Uint dt) { mTimeAcc = (dt*mSpeed+mTimeAcc)%mWLen; }
-	int8_t calcWave(Uint d);
+	int8_t calcWave(Uint x, Uint y);
 };
 
 #endif //_emitter_h_

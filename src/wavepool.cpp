@@ -27,7 +27,7 @@ Image *WavePool::getNewImage()
 	for(iy=0; iy<mHeight; iy++)
 		for(ix=0; ix<mWidth; ix++)
 		{
-			c.r = (unsigned char)(mEmitters[0].calcWave(ix)+127);
+			c.r = (unsigned char)(mEmitters[0].calcWave(ix, iy)+127);
 			img.setPixel(ix, iy, c);
 		}
 	return &img;

@@ -35,13 +35,34 @@ void Emitter::renewCache()
 	mWCacheLen_2 = mWCacheLen<<1;
 }
 
-int8_t Emitter::calcWave(Uint d)
+int8_t Emitter::calcWave(Uint x, Uint y)
 {
-	//we add mwCacheLen_2 to avoid d from possibly warping to negative
-	d = (d+mWCacheLen_2-mTimeAcc/1000)%mWCacheLen_2;
-	if(d >= mWCacheLen) //negative
-		return -(mWCache[d-mWCacheLen]);
-	return mWCache[d];
+	Uint squaredbit, remainder, root;
+	x = (x>getX() ? x-getX() : getX()-x);
+	y = (y>getX() ? y-getY() : getY()-y);
+	root = x*x+y*y;
+	// Integer square root
+	if(root>1)
+	{
+		squaredbit = ((~((Uint)0)) >> 1) & ~((~((Uint)0)) >> 2);
+		remainder = root;
+		root = 0;
+		while (squaredbit > 0) {
+			if (remainder >= (squaredbit | root)) {
+				remainder -= (squaredbit | root);
+				root >>= 1;
+				root |= squaredbit;
+			} else {
+				root >>= 1;
+			}
+			squaredbit >>= 2; 
+		}
+	}
 
+	//we add mwCacheLen_2 to avoid d from possibly warping to negative
+	root = (root+mWCacheLen_2-mTimeAcc/1000)%mWCacheLen_2;
+	if(root >= mWCacheLen) //negative
+		return -(mWCache[root-mWCacheLen]);
+	return mWCache[root];
 }
 
