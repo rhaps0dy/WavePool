@@ -41,12 +41,12 @@ void Application::render(void)
 }
 
 //called after render
-void Application::update(Float seconds_elapsed)
+void Application::update(Uint dt)
 {
 	if (keystate[SDL_SCANCODE_SPACE])
 	{
 	}
-	wp->update(seconds_elapsed);
+	wp->update(dt);
 }
 
 //keyboard press event

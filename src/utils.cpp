@@ -79,14 +79,14 @@ SDL_Window* createWindow(const char* caption, int width, int height )
 void launchLoop(Application* app)
 {
 	SDL_Event sdlEvent;
-	Float last_time = SDL_GetTicks();
+	Uint last_time = SDL_GetTicks();
 	int x,y;
 
 	SDL_GetMouseState(&x,&y);
 	app->mouse_position.set(x,y);
 
 #ifdef APP_TIME_ENABLED
-	Float start_time = SDL_GetTicks();
+	Uint start_time = SDL_GetTicks();
 #endif //APP_TIME_ENABLED
 
 	//infinite loop
@@ -129,10 +129,10 @@ void launchLoop(Application* app)
 		app->mouse_position.set(x,y);
 
 		//update logic
-		Float now = SDL_GetTicks();
-		Float elapsed_time = (now - last_time) * 0.001; //0.001 converts from milliseconds to seconds
+		Uint now = SDL_GetTicks();
+		Uint elapsed_time = (now - last_time);
 #ifdef APP_TIME_ENABLED
-		app->time = (now - start_time) * 0.001;
+		app->time = (now - start_time);
 #endif //APP_TIME_ENABLED
 		app->update(elapsed_time);
 		last_time = now;

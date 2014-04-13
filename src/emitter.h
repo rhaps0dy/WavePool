@@ -10,44 +10,42 @@ class Emitter
 {
 private:
 	//amplitude of the wave
-	Float mAmp;
+	Uint mAmp;
 	//wavelength (px)
-	Float mWLen;
+	Uint mWLen;
 	//transfer speed (px/s)
-	Float mSpeed;
+	Uint mSpeed;
 	//origin of the wave
 	Vector2 mPos;
 	//Accumulated time
-	Float mTimeAcc;
+	Uint mTimeAcc;
 	//cached wave function. We cache T/2, with 1px resolution approx
-	Float *mWCache;
+	int8_t *mWCache;
 	Uint mWCacheLen;
 	//2*mWCacheLen
 	Uint mWCacheLen_2;
 
-	void renewCache();
 
 public:
-	inline Float getAmp() { return mAmp; }
-	inline Float getWLen() { return mWLen; }
-	inline Float getSpeed() { return mSpeed; }
+	void renewCache();
+	inline Uint getAmp() { return mAmp; }
+	inline Uint getWLen() { return mWLen/1000; }
+	inline Uint getSpeed() { return mSpeed; }
 
-	inline void setAmp(Float a) { mAmp = a; renewCache();}
-	inline void setWLen(Float wl) { mWLen = wl; renewCache();}
-	inline void setSpeed(Float s) { mSpeed = s; }
+	inline void setAmp(Uint a) { mAmp = a; renewCache();}
+	inline void setWLen(Uint wl) { mWLen = wl*1000; renewCache();}
+	inline void setSpeed(Uint s) { mSpeed = s; }
 
-	inline void shiftPhase(Float p) { addTime(p/mSpeed); }
-
-	inline void setPos(Float x, Float y) { mPos.set(x, y); }
+	inline void setPos(Uint x, Uint y) { mPos.set(x, y); }
 	inline Vector2 getPos() { return mPos; }
-	inline Float getX() { return mPos.x; }
-	inline Float getY() { return mPos.y; }
+	inline Uint getX() { return mPos.x; }
+	inline Uint getY() { return mPos.y; }
 
-	Emitter(double a, double l, double s, double x, double y);
+	Emitter(Uint a, Uint l, Uint s, Uint x, Uint y);
 	~Emitter();
 
-	void addTime(Float dt);
-	Float calcWave(Float x, Float y);
+	inline void addTime(Uint dt) { mTimeAcc = (dt*mSpeed+mTimeAcc)%mWLen; }
+	int8_t calcWave(Uint d);
 };
 
 #endif //_emitter_h_

@@ -2,12 +2,9 @@
 #include <cstdlib>
 #include <cstdio>
 
-Emitter::Emitter(double a, double l, double s, double x, double y) :
-	mAmp(a), mWLen(l), mSpeed(s), mPos(x, y), mTimeAcc(0.), mWCache(NULL)
+Emitter::Emitter(Uint a, Uint l, Uint s, Uint x, Uint y) :
+	mAmp(a), mWLen(l*1000), mSpeed(s), mPos(x, y), mTimeAcc(0), mWCache(NULL)
 {
-	makeAbs(&mWLen);
-	makeAbs(&mAmp);
-	makeAbs(&mSpeed);
 	renewCache();
 }
 
@@ -18,31 +15,33 @@ Emitter::~Emitter()
 
 void Emitter::renewCache()
 {
-	mWCacheLen = (Uint)(mWLen/2.);
-	if(mWCache) free(mWCache);
-	mWCache = (Float *) malloc(mWCacheLen*sizeof(Float));
-	Float step = (Float)mWCacheLen;
-	step = PI/step;
+	mWCacheLen = getWLen()/2;
+	if(mWCache==NULL) free(mWCache);
+	mWCache = (int8_t *) malloc(mWCacheLen*sizeof(int8_t));
+	Float step = PI/((Float)mWCacheLen);
+	Float res;
 	for(Uint i=0; i<mWCacheLen; i++)
 	{
-		mWCache[i] = mAmp*sin((Float)(i)*step);
+		res = ((Float)mAmp) * sin(((Float)i)*step);
+#ifdef DEBUG
+		if(res < -128. || res > 127.)
+		{
+			printf("WARNING: Sine wave result exceeds int8_t boundaries\n");
+			res = clamp(res, -128., 127.);
+		}
+#endif //DEBUG
+		mWCache[i] = (int8_t)(res);
 	}
 	mWCacheLen_2 = mWCacheLen<<1;
 }
 
-Float Emitter::calcWave(Float x, Float y)
+int8_t Emitter::calcWave(Uint d)
 {
-	//return mAmp*sin(2*PI*(distance(x, y, mPos.x, mPos.y)-mTimeAcc)/mWLen);
-	Uint d = (Uint)(distance(x, y, mPos.x, mPos.y)-mTimeAcc);
-	d = d%mWCacheLen_2;
+	//we add mwCacheLen_2 to avoid d from possibly warping to negative
+	d = (d+mWCacheLen_2-mTimeAcc/1000)%mWCacheLen_2;
 	if(d >= mWCacheLen) //negative
 		return -(mWCache[d-mWCacheLen]);
 	return mWCache[d];
+
 }
 
-void Emitter::addTime(Float dt)
-{
-	mTimeAcc += dt*mSpeed;
-	while(mTimeAcc > mWLen)
-		mTimeAcc -= mWLen;
-}

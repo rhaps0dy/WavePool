@@ -22,7 +22,7 @@ public:
 	WavePool *wp;
 
 #ifdef APP_TIME_ENABLED
-	Float time;
+	Uint time;
 #endif //APP_TIME_ENABLED
 
 	//keyboard state
@@ -40,7 +40,7 @@ public:
 	//main methods
 	void init( void );
 	void render( void );
-	void update( Float seconds_elapsed );
+	void update( Uint dt );
 
 	//methods for events
 	void onKeyPressed( SDL_KeyboardEvent event );

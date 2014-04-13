@@ -3,11 +3,11 @@
 
 WavePool::WavePool(Uint w, Uint h) :
 	img(w, h), mWidth(w), mHeight(h),
-	mNumEmitters(2), mEmitters(NULL)
+	mNumEmitters(1), mEmitters(NULL)
 {
 	mEmitters = (Emitter *)malloc(mNumEmitters*sizeof(Emitter));
-	mEmitters[0] = Emitter(255./4., 100., 50., 100., 100.);
-	mEmitters[1] = Emitter(255./4., 200., 25., 500., 500.);
+	mEmitters[0] = Emitter(127, 100, 100, 100, 100);
+//	mEmitters[1] = Emitter(255./4., 200., 25., 500., 500.);
 }
 
 WavePool::~WavePool()
@@ -21,23 +21,19 @@ Image *WavePool::getNewImage()
 	Color c;
 	Float sum;
 
-//	#pragma omp parallel for default(shared) private(iy, ix, i, c, sum)
+	mEmitters[0].renewCache();
+
+	#pragma omp parallel for default(shared) private(iy, ix, i, c, sum)
 	for(iy=0; iy<mHeight; iy++)
-	{
 		for(ix=0; ix<mWidth; ix++)
 		{
-			sum=0.0;
-			for(i=0; i<mNumEmitters; i++)
-				sum += mEmitters[i].calcWave((Float)ix, (Float)iy);
-			c.r = (unsigned char)(round(sum+255./2.));
+			c.r = (unsigned char)(mEmitters[0].calcWave(ix)+127);
 			img.setPixel(ix, iy, c);
-			if(ix==0)printf("%d=%d=%f ", c.r, img.getPixel(ix, iy).r, sum);
 		}
-	}
 	return &img;
 }
 
-void WavePool::update(Float dt)
+void WavePool::update(Uint dt)
 {
 	#pragma omp parallel for
 	for(Uint i=0; i<mNumEmitters; i++)

@@ -19,7 +19,7 @@ public:
 	~WavePool();
 
 	Image *getNewImage();
-	void update(Float dt);
+	void update(Uint dt);
 
 	void resize(Uint w, Uint h);
 };

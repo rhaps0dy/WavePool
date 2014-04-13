@@ -28,11 +28,6 @@ inline Float clamp(Float x, Float a, Float b) { return x < a ? a : (x > b ? b : 
 inline unsigned int clamp(unsigned int x, unsigned int a, unsigned int b) { return x < a ? a : (x > b ? b : x); }
 inline unsigned char clamp(unsigned char x, unsigned char a, unsigned char b) { return x < a ? a : (x > b ? b : x); }
 
-inline void makeAbs(Float *f)
-{
-	*f = clamp(*f, 0, *f);
-}
-
 class Vector3;
 
 //Color class to store colors in unsigned byte
