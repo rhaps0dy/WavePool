@@ -10,6 +10,8 @@ void Emitter::init(Uint a, Uint l, Uint s, Uint x, Uint y, Uint w, Uint h)
 	mPos.x = x;
 	mPos.y = y;
 	mTimeAcc = 0;
+	mWCache = NULL;
+	mDistCache = NULL;
 
 	renewCache();
 	resize(w, h);
@@ -44,35 +46,32 @@ void Emitter::renewCache()
 
 int8_t Emitter::calcWave(Uint x, Uint y)
 {
-	Uint squaredbit, remainder, root;
-	x = (x>getX() ? x-getX() : getX()-x);
-	y = (y>getX() ? y-getY() : getY()-y);
-	root = x*x+y*y;
-	// Integer square root
-	if(root>1)
-	{
-		squaredbit = ((~((Uint)0)) >> 1) & ~((~((Uint)0)) >> 2);
-		remainder = root;
-		root = 0;
-		while (squaredbit > 0) {
-			if (remainder >= (squaredbit | root)) {
-				remainder -= (squaredbit | root);
-				root >>= 1;
-				root |= squaredbit;
-			} else {
-				root >>= 1;
-			}
-			squaredbit >>= 2; 
-		}
-	}
-
+	Uint d;
 	//we add mwCacheLen_2 to avoid d from possibly warping to negative
-	root = (root+mWCacheLen_2-mTimeAcc/1000)%mWCacheLen_2;
-	if(root >= mWCacheLen) //negative
-		return -(mWCache[root-mWCacheLen]);
-	return mWCache[root];
+	d = (mDistCache[y*mWidth+x]+mWCacheLen_2-mTimeAcc/1000)%mWCacheLen_2;
+	if(d >= mWCacheLen) //negative
+		return -(mWCache[d-mWCacheLen]);
+	return mWCache[d];
 }
 
 void Emitter::resize(Uint w, Uint h)
 {
+	if(mDistCache) free(mDistCache);
+	mDistCache = (Uint *) malloc(w*h*sizeof(Uint));
+	mWidth = w;
+	mHeight = h;
+	renewDistCache();
+}
+
+void Emitter::renewDistCache()
+{
+	Uint x, y, _x, _y;
+	#pragma omp parallel for default(shared) private(x, y, _x, _y)
+	for(y=0; y<mHeight; y++)
+		for(x=0; x<mWidth; x++)
+		{
+			_x = (x>getX() ? x-getX() : getX()-x);
+			_y = (y>getX() ? y-getY() : getY()-y);
+			mDistCache[y*mWidth+x] = isqrt(_x*_x+_y*_y);
+		}
 }

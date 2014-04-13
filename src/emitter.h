@@ -25,6 +25,8 @@ private:
 	//2*mWCacheLen
 	Uint mWCacheLen_2;
 	//pixel distance cache
+	Uint *mDistCache;
+	Uint mWidth, mHeight;
 
 	void renewCache();
 public:
@@ -48,6 +50,7 @@ public:
 	inline void addTime(Uint dt) { mTimeAcc = (dt*mSpeed+mTimeAcc)%mWLen; }
 	int8_t calcWave(Uint x, Uint y);
 	void resize(Uint w, Uint h);
+	void renewDistCache();
 };
 
 #endif //_emitter_h_

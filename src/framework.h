@@ -28,6 +28,30 @@ inline Float clamp(Float x, Float a, Float b) { return x < a ? a : (x > b ? b : 
 inline unsigned int clamp(unsigned int x, unsigned int a, unsigned int b) { return x < a ? a : (x > b ? b : x); }
 inline unsigned char clamp(unsigned char x, unsigned char a, unsigned char b) { return x < a ? a : (x > b ? b : x); }
 
+inline static Uint isqrt(Uint root)
+{
+	Uint squaredbit, remainder;
+	// Integer square root
+	if(root>1)
+	{
+		squaredbit = ((~((Uint)0)) >> 1) & ~((~((Uint)0)) >> 2);
+		remainder = root;
+		root = 0;
+		while (squaredbit > 0) {
+			if (remainder >= (squaredbit | root)) {
+				remainder -= (squaredbit | root);
+				root >>= 1;
+				root |= squaredbit;
+			} else {
+				root >>= 1;
+			}
+			squaredbit >>= 2; 
+		}
+	}
+	return root;
+}
+
+
 class Vector3;
 
 //Color class to store colors in unsigned byte

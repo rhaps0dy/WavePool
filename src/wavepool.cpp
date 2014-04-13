@@ -1,11 +1,11 @@
 #include "wavepool.h"
 
 WavePool::WavePool(Uint w, Uint h) :
-	img(w, h), mWidth(w), mHeight(h), mNumEmitters(1)
+	img(w, h), mWidth(w), mHeight(h), mNumEmitters(2)
 {
 	mEmitters = new Emitter[mNumEmitters];
-	mEmitters[0].init(127, 100, 100, 100, 100, w, h);
-//	mEmitters[1] = Emitter(255./4., 200., 25., 500., 500.);
+	mEmitters[0].init(255/4, 100, 100, 100, 100, w, h);
+	mEmitters[1].init(255/4, 200, 25, 500, 500, w, h);
 }
 
 WavePool::~WavePool()
@@ -25,7 +25,10 @@ Image *WavePool::getNewImage()
 	for(iy=0; iy<mHeight; iy++)
 		for(ix=0; ix<mWidth; ix++)
 		{
-			c.r = (unsigned char)(mEmitters[0].calcWave(ix, iy)+127);
+			sum = 255/2;
+			for(i=0; i<mNumEmitters; i++)
+				sum += mEmitters[i].calcWave(ix, iy);
+			c.r = (unsigned char)sum;
 			img.setPixel(ix, iy, c);
 		}
 	return &img;
@@ -51,6 +54,7 @@ void WavePool::resize(Uint w, Uint h)
 		x *= (Float)w;
 		y *= (Float)h;
 		mEmitters[i].setPos(x, y);
+		mEmitters[i].resize(w, h);
 	}
 	mWidth = w;
 	mHeight = h;
