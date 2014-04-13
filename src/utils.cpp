@@ -105,10 +105,10 @@ void launchLoop(Application* app)
 				{
 					case SDL_QUIT: return; break; //EVENT for when the user clicks the [x] in the corner
 					case SDL_MOUSEBUTTONDOWN: //EXAMPLE OF sync mouse input
-						app->onMouseButton(sdlEvent.button);
+						app->onMouseButtonDown(sdlEvent.button);
 						break;
 					case SDL_MOUSEBUTTONUP:
-						//...
+						app->onMouseButtonUp(sdlEvent.button);
 						break;
 					case SDL_KEYDOWN: //EXAMPLE OF sync keyboard input
 						app->onKeyPressed(sdlEvent.key);
@@ -116,7 +116,6 @@ void launchLoop(Application* app)
 					case SDL_WINDOWEVENT:
 						switch (sdlEvent.window.event) {
 							case SDL_WINDOWEVENT_RESIZED: //resize opengl context
-								std::cout << "window resize" << std::endl;
 								app->setWindowSize( sdlEvent.window.data1, sdlEvent.window.data2 );
 								break;
 						}
@@ -125,8 +124,10 @@ void launchLoop(Application* app)
 
 		//get mouse position and delta
 		app->mouse_state = SDL_GetMouseState(&x,&y);
+#ifdef APP_DELTA_ENABLED
 		app->mouse_delta.set( app->mouse_position.x - x, app->mouse_position.y - y );
-		app->mouse_position.set(x,y);
+#endif //APP_DELTA_ENABLED
+		app->mouse_position.set(x,app->window_height - y);
 
 		//update logic
 		Uint now = SDL_GetTicks();

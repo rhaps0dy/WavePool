@@ -16,7 +16,10 @@ private:
 	Uint mNumEmitters;
 	Emitter *mEmitters;
 
+	Uint mSelectedIndex;
+
 public:
+
 	WavePool(Uint w, Uint h);
 	~WavePool();
 
@@ -24,6 +27,14 @@ public:
 	void update(Uint dt);
 
 	void resize(Uint w, Uint h);
+
+	void select(Vector2 *p);
+	void move(Vector2 *p);
+	void add(Vector2 *p);
+	void varWL(int amt);
+	void varAmp(int amt);
+	void varSpd(int amt);
+	void setColor(unsigned char c);
 };
 
 #endif //_wavepool_h_

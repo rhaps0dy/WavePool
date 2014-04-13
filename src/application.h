@@ -12,6 +12,8 @@
 
 class Application
 {
+private:
+	bool doMove;
 public:
 	//window
 	SDL_Window* window;
@@ -31,7 +33,9 @@ public:
 	//mouse state
 	int mouse_state; //tells which buttons are pressed
 	Vector2 mouse_position; //last mouse position
+#ifdef APP_DELTA_ENABLED
 	Vector2 mouse_delta; //mouse movement in the last frame
+#endif //APP_DELTA_ENABLED
 
 	//constructor and destructor
 	Application(const char* caption, int width, int height);
@@ -44,7 +48,8 @@ public:
 
 	//methods for events
 	void onKeyPressed( SDL_KeyboardEvent event );
-	void onMouseButton( SDL_MouseButtonEvent event );
+	void onMouseButtonDown( SDL_MouseButtonEvent event );
+	void onMouseButtonUp( SDL_MouseButtonEvent event );
 
 	//other methods to control the app
 	void setWindowSize(int width, int height);

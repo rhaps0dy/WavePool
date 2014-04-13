@@ -12,6 +12,7 @@ void Emitter::init(Uint a, Uint l, Uint s, Uint x, Uint y, Uint w, Uint h)
 	mTimeAcc = 0;
 	mWCache = NULL;
 	mDistCache = NULL;
+	color = 0;
 
 	renewCache();
 	resize(w, h);

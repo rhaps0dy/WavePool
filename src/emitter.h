@@ -30,6 +30,9 @@ private:
 
 	void renewCache();
 public:
+	//color of this emitter: r, g or b
+	unsigned char color;
+
 	inline Uint getAmp() { return mAmp; }
 	inline Uint getWLen() { return mWLen/1000; }
 	inline Uint getSpeed() { return mSpeed; }
@@ -38,7 +41,7 @@ public:
 	inline void setWLen(Uint wl) { mWLen = wl*1000; renewCache();}
 	inline void setSpeed(Uint s) { mSpeed = s; }
 
-	inline void setPos(Uint x, Uint y) { mPos.set(x, y); }
+	inline void setPos(Uint x, Uint y) { mPos.set(x, y); renewDistCache();}
 	inline Vector2 getPos() { return mPos; }
 	inline Uint getX() { return mPos.x; }
 	inline Uint getY() { return mPos.y; }

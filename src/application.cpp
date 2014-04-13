@@ -2,7 +2,8 @@
 #include "utils.h"
 #include "image.h"
 
-Application::Application(const char* caption, int width, int height)
+Application::Application(const char* caption, int width, int height) :
+	doMove(false)
 {
 	this->window = createWindow(caption, width, height);
 
@@ -43,10 +44,9 @@ void Application::render(void)
 //called after render
 void Application::update(Uint dt)
 {
-	if (keystate[SDL_SCANCODE_SPACE])
-	{
-	}
 	wp->update(dt);
+	if(doMove)
+		wp->move(&mouse_position);
 }
 
 //keyboard press event
@@ -59,18 +59,23 @@ void Application::onKeyPressed( SDL_KeyboardEvent event )
 }
 
 //mouse button event
-void Application::onMouseButton( SDL_MouseButtonEvent event )
+void Application::onMouseButtonDown( SDL_MouseButtonEvent event )
 {
-	if (event.button == SDL_BUTTON_LEFT) //left mouse
-	{
+	if (event.button == SDL_BUTTON_RIGHT)
+		wp->select(&mouse_position);
+	else if(event.button == SDL_BUTTON_LEFT)
+		doMove = true;
+}
 
-	}
+void Application::onMouseButtonUp( SDL_MouseButtonEvent event )
+{
+	if(event.button == SDL_BUTTON_LEFT)
+		doMove = false;
 }
 
 //when the app starts
 void Application::start()
 {
-	std::cout << "launching loop..." << std::endl;
 	launchLoop(this);
 }
 
