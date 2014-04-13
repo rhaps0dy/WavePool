@@ -9,44 +9,45 @@
 class Emitter
 {
 private:
-	//all waves move at this speed (px/s)
-	static constexpr Float WAVE_SPEED=.1;
-	//origin of the wave
-	Vector2 mPos;
 	//amplitude of the wave
 	Float mAmp;
-	//angular frequency of the wave (rad/s)
-	Float mFreq;
-	//accumulated time (s)
+	//wavelength (px)
+	Float mWLen;
+	//transfer speed (px/s)
+	Float mSpeed;
+	//origin of the wave
+	Vector2 mPos;
+	//Accumulated time
 	Float mTimeAcc;
-	//period of the sine wave (s)
-	Float mPeriod;
+	//cached wave function. We cache T/2, with 1px resolution approx
+	Float *mWCache;
+	Uint mWCacheLen;
+	//2*mWCacheLen
+	Uint mWCacheLen_2;
+
+	void renewCache();
 
 public:
-	inline void setAmp(Float a) { mAmp = a; }
-	inline void setFreq(Float f) { mFreq = 2.*PI*f; }
-	inline void addAmp(Float a) { mAmp += a; }
-	inline void addFreq(Float f) { mFreq += 2.*PI*f; }
 	inline Float getAmp() { return mAmp; }
-	inline Float getFreq() { return mFreq/(2.*PI); }
+	inline Float getWLen() { return mWLen; }
+	inline Float getSpeed() { return mSpeed; }
+
+	inline void setAmp(Float a) { mAmp = a; renewCache();}
+	inline void setWLen(Float wl) { mWLen = wl; renewCache();}
+	inline void setSpeed(Float s) { mSpeed = s; }
+
+	inline void shiftPhase(Float p) { addTime(p/mSpeed); }
+
 	inline void setPos(Float x, Float y) { mPos.set(x, y); }
 	inline Vector2 getPos() { return mPos; }
 	inline Float getX() { return mPos.x; }
 	inline Float getY() { return mPos.y; }
 
-	Emitter(double a, double f, double x, double y);
+	Emitter(double a, double l, double s, double x, double y);
+	~Emitter();
 
-	inline void addTime(Float dt)
-	{
-		mTimeAcc += dt;
-		if(mTimeAcc > mPeriod)
-			mTimeAcc -= mPeriod;
-	}
-
-	inline Float calcWave(Float x, Float y)
-	{
-		return mAmp*sin(mFreq*mTimeAcc - WAVE_SPEED*distance(x, y, mPos.x, mPos.y));
-	}
+	void addTime(Float dt);
+	Float calcWave(Float x, Float y);
 };
 
 #endif //_emitter_h_

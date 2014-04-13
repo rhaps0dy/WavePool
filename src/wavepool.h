@@ -8,7 +8,7 @@
 class WavePool
 {
 private:
-	Image *img;
+	Image img;
 	Uint mWidth, mHeight;
 
 	Uint mNumEmitters;

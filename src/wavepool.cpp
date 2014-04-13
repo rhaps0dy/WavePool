@@ -1,51 +1,63 @@
 #include "wavepool.h"
+#include <cstdlib>
 
 WavePool::WavePool(Uint w, Uint h) :
-	mWidth(w), mHeight(h),
-	mNumEmitters(0), mEmitters(NULL)
+	img(w, h), mWidth(w), mHeight(h),
+	mNumEmitters(2), mEmitters(NULL)
 {
-	mEmitters = new Emitter(255./4., 1., mWidth/2., mHeight/2.);
-	img = new Image(w, h);
+	mEmitters = (Emitter *)malloc(mNumEmitters*sizeof(Emitter));
+	mEmitters[0] = Emitter(255./4., 100., 50., 100., 100.);
+	mEmitters[1] = Emitter(255./4., 200., 25., 500., 500.);
 }
 
 WavePool::~WavePool()
 {
-	delete img;
-	delete mEmitters;
+	free(mEmitters);
 }
 
 Image *WavePool::getNewImage()
 {
-	//we use dual variables for speed. We use 8 bytes of memory more but
-	//we avoid a lot runtime casts.
-	Uint ix, iy;
-	Float fx, fy;
+	Uint iy, ix, i;
 	Color c;
-	for(iy=0, fy=0.0; iy<mHeight; iy++, fy+=1.)
-		for(ix=0, fx=0.0; ix<mWidth; ix++, fx+=1.)
-		{
-			c.r = (Uint)(mEmitters->calcWave(fx, fy) + 255./2.);
-			img->setPixel(ix, iy, c);
-		}
+	Float sum;
 
-	return img;
+//	#pragma omp parallel for default(shared) private(iy, ix, i, c, sum)
+	for(iy=0; iy<mHeight; iy++)
+	{
+		for(ix=0; ix<mWidth; ix++)
+		{
+			sum=0.0;
+			for(i=0; i<mNumEmitters; i++)
+				sum += mEmitters[i].calcWave((Float)ix, (Float)iy);
+			c.r = (unsigned char)(round(sum+255./2.));
+			img.setPixel(ix, iy, c);
+			if(ix==0)printf("%d=%d=%f ", c.r, img.getPixel(ix, iy).r, sum);
+		}
+	}
+	return &img;
 }
 
 void WavePool::update(Float dt)
 {
-	mEmitters->addTime(dt);
+	#pragma omp parallel for
+	for(Uint i=0; i<mNumEmitters; i++)
+		mEmitters[i].addTime(dt);
 }
 
 void WavePool::resize(Uint w, Uint h)
 {
-	img->resizeNoCopy(w, h);
-	Float x = mEmitters->getX();
-	Float y = mEmitters->getY();
-	x /= (Float)mWidth;
-	y /= (Float)mHeight;
-	x *= (Float)w;
-	y *= (Float)h;
-	mEmitters->setPos(x, y);
+	img.resizeNoCopy(w, h);
+	#pragma omp parallel for
+	for(Uint i=0; i<mNumEmitters; i++)
+	{
+		Float x = mEmitters[i].getX();
+		Float y = mEmitters[i].getY();
+		x /= (Float)mWidth;
+		y /= (Float)mHeight;
+		x *= (Float)w;
+		y *= (Float)h;
+		mEmitters[i].setPos(x, y);
+	}
 	mWidth = w;
 	mHeight = h;
 }

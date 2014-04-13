@@ -45,7 +45,6 @@ void Application::update(Float seconds_elapsed)
 {
 	if (keystate[SDL_SCANCODE_SPACE])
 	{
-		//...
 	}
 	wp->update(seconds_elapsed);
 }
