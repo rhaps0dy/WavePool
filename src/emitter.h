@@ -10,7 +10,7 @@ class Emitter
 {
 private:
 	//all waves move at this speed (px/s)
-	static constexpr Float WAVE_SPEED=1000.;
+	static constexpr Float WAVE_SPEED=.1;
 	//origin of the wave
 	Vector2 mPos;
 	//amplitude of the wave

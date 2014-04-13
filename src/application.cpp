@@ -74,3 +74,11 @@ void Application::start()
 	std::cout << "launching loop..." << std::endl;
 	launchLoop(this);
 }
+
+void Application::setWindowSize(int width, int height)
+{
+	glViewport( 0,0, width, height );
+	window_width = width;
+	window_height = height;
+	wp->resize(width, height);
+}

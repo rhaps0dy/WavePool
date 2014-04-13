@@ -47,12 +47,7 @@ public:
 	void onMouseButton( SDL_MouseButtonEvent event );
 
 	//other methods to control the app
-	void setWindowSize(int width, int height) {
-		glViewport( 0,0, width, height );
-		this->window_width = width;
-		this->window_height = height;
-	}
-
+	void setWindowSize(int width, int height);
 	Vector2 getWindowSize()
 	{
 		int w,h;

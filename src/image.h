@@ -56,6 +56,7 @@ public:
 	void setPixelSafe(unsigned int x, unsigned int y, const Color& c) const { x = clamp(x, 0, width-1); y = clamp(y, 0, height-1); pixels[ y * width + x ] = c; }
 
 	void resize(unsigned int width, unsigned int height);
+	void resizeNoCopy(unsigned int width, unsigned int height);
 	void scale(unsigned int width, unsigned int height);
 
 	void flipY(); //flip the image top-down

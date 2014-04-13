@@ -15,7 +15,7 @@ Image::Image(unsigned int width, unsigned int height)
 
 //copy constructor
 Image::Image(const Image& c) {
-	if(pixels) delete pixels;
+	if(pixels) delete[] pixels;
 	pixels = NULL;
 
 	width = c.width;
@@ -30,7 +30,7 @@ Image::Image(const Image& c) {
 //assign operator
 Image& Image::operator = (const Image& c)
 {
-	if(pixels) delete pixels;
+	if(pixels) delete[] pixels;
 	pixels = NULL;
 
 	width = c.width;
@@ -46,7 +46,7 @@ Image& Image::operator = (const Image& c)
 Image::~Image()
 {
 	if(pixels)
-		delete pixels;
+		delete[] pixels;
 }
 
 //change image size (the old one will remain in the top-left corner)
@@ -60,7 +60,16 @@ void Image::resize(unsigned int width, unsigned int height)
 		for(unsigned int y = 0; y < min_height; ++y)
 			new_pixels[ y * width + x ] = getPixel(x,y);
 
-	delete pixels;
+	delete[] pixels;
+	this->width = width;
+	this->height = height;
+	pixels = new_pixels;
+}
+
+void Image::resizeNoCopy(unsigned int width, unsigned int height)
+{
+	Color* new_pixels = new Color[width*height];
+	if(pixels) delete[] pixels;
 	this->width = width;
 	this->height = height;
 	pixels = new_pixels;
@@ -75,7 +84,7 @@ void Image::scale(unsigned int width, unsigned int height)
 		for(unsigned int y = 0; y < height; ++y)
 			new_pixels[ y * width + x ] = getPixel((unsigned int)(this->width * (x / (Float)width)), (unsigned int)(this->height * (y / (Float)height)) );
 
-	delete pixels;
+	delete[] pixels;
 	this->width = width;
 	this->height = height;
 	pixels = new_pixels;
@@ -147,7 +156,7 @@ bool Image::loadTGA(const char* filename)
 	if (tgainfo->width <= 0 || tgainfo->height <= 0 || (header[4] != 24 && header[4] != 32))
 	{
 		fclose(file);
-		delete tgainfo;
+		delete[] tgainfo;
 		return false;
 	}
 
@@ -160,10 +169,10 @@ bool Image::loadTGA(const char* filename)
 	if (tgainfo->data == NULL || fread(tgainfo->data, 1, imageSize, file) != imageSize)
 	{
 		if (tgainfo->data != NULL)
-			delete tgainfo->data;
+			delete[] tgainfo->data;
 
 		fclose(file);
-		delete tgainfo;
+		delete[] tgainfo;
 		return false;
 	}
 
@@ -171,7 +180,7 @@ bool Image::loadTGA(const char* filename)
 
 	//save info in image
 	if(pixels)
-		delete pixels;
+		delete[] pixels;
 
 	width = tgainfo->width;
 	height = tgainfo->height;
@@ -185,8 +194,8 @@ bool Image::loadTGA(const char* filename)
 			this->setPixel(x , height - y - 1, Color( tgainfo->data[pos+2] / 255.0f, tgainfo->data[pos+1] / 255.0f, tgainfo->data[pos] / 255.0f) );
 		}
 
-	delete tgainfo->data;
-	delete tgainfo;
+	delete[] tgainfo->data;
+	delete[] tgainfo;
 
 	return true;
 }

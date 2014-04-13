@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(WavePool)
 
 #CXXFLAGS
-set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -DDEBUG -D_DEBUG")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g")
 add_definitions("-std=c++11 -DDOUBLE_PRECISION -I/usr/local/include")

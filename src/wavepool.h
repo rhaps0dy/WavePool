@@ -8,7 +8,7 @@
 class WavePool
 {
 private:
-	Image img;
+	Image *img;
 	Uint mWidth, mHeight;
 
 	Uint mNumEmitters;
@@ -20,6 +20,8 @@ public:
 
 	Image *getNewImage();
 	void update(Float dt);
+
+	void resize(Uint w, Uint h);
 };
 
 #endif //_wavepool_h_
