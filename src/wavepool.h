@@ -41,6 +41,8 @@ public:
 	void addSpd(Uint amt);
 	void rmSpd(Uint amt);
 
+	void togglePause();
+
 	void setColor(unsigned char c);
 };
 

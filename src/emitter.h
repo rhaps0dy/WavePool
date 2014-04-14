@@ -32,6 +32,7 @@ private:
 public:
 	//color of this emitter: r, g or b
 	unsigned char color;
+	bool running;
 
 	inline Uint getAmp() { return mAmp; }
 	inline Uint getWLen() { return mWLen/1000; }
@@ -51,9 +52,11 @@ public:
 	void destroy();
 
 	inline void addTime(Uint dt) { mTimeAcc = (dt*mSpeed+mTimeAcc)%mWLen; }
+	inline void invertPhase() { addTime((Uint)((Float)mWLen)/((Float)mSpeed)/2.); }
 	int8_t calcWave(Uint x, Uint y);
 	void resize(Uint w, Uint h);
 	void renewDistCache();
+	void togglePause() { running = !running; }
 };
 
 #endif //_emitter_h_

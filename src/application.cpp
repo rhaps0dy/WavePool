@@ -55,6 +55,9 @@ void Application::onKeyPressed( SDL_KeyboardEvent event )
 	switch(event.keysym.sym)
 	{
 		case SDLK_ESCAPE: exit(0); break; //ESC key, kill the app
+		case SDLK_p:
+			wp->togglePause();
+			break;
 		case SDLK_a:
 			wp->add(&mouse_position);
 			break;

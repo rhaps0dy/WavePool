@@ -20,12 +20,14 @@ Image *WavePool::getNewImage()
 	for(iy=0; iy<mHeight; iy++)
 		for(ix=0; ix<mWidth; ix++)
 		{
-			c.r = c.g = c.b = 255/2;
+			c.r = 255/2;
 			for(i=0; i<mEmitters.size(); i++)
-				c.v[mEmitters[i].color] += mEmitters[i].calcWave(ix, iy);
+				c.r += mEmitters[i].calcWave(ix, iy);
+			c.g = c.b = c.r;
 			img.setPixel(ix, iy, c);
 		}
-	c.r = c.g = c.b = (unsigned char)255;
+	c.g = (unsigned char)255;
+	c.r = c.b = (unsigned char)0;
 	#pragma omp parallel for default(shared) private(i, x, y, ix, iy)
 	for(i=0; i<mEmitters.size(); i++)
 	{
@@ -49,7 +51,8 @@ void WavePool::update(Uint dt)
 {
 	#pragma omp parallel for
 	for(Uint i=0; i<mEmitters.size(); i++)
-		mEmitters[i].addTime(dt);
+		if(mEmitters[i].running)
+			mEmitters[i].addTime(dt);
 }
 
 void WavePool::resize(Uint w, Uint h)
@@ -90,13 +93,18 @@ void WavePool::move(Vector2 *p)
 {
 	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].setPos((Uint)p->x, ((Uint)p->y));
+	printf("Position %u, %u\n", (Uint)p->x, (Uint)p->y);
 }
 
 void WavePool::add(Vector2 *p)
 {
 	mEmitters.emplace_back();
 	mSelectedIndex = mEmitters.size()-1;
-	mEmitters[mSelectedIndex].init(100, 100, 100, p->x, p->y, mWidth, mHeight);
+	mEmitters[mSelectedIndex].init(100, 100, 100, (Uint)p->x, (Uint)p->y, mWidth, mHeight);
+	#pragma omp parallel for
+	for(Uint i=0; i<mEmitters.size(); i++)
+		mEmitters[i].setAmp(255/2/mEmitters.size());
+	printf("Added emitter in position %u, %u\n", (Uint)p->x, (Uint)p->y);
 }
 
 void WavePool::remove()
@@ -104,6 +112,11 @@ void WavePool::remove()
 	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].destroy();
 	mEmitters.erase(mEmitters.begin()+mSelectedIndex);
+	printf("Removed emitter %u\n", mSelectedIndex);
+	mSelectedIndex = mEmitters.size();
+	#pragma omp parallel for
+	for(Uint i=0; i<mEmitters.size(); i++)
+		mEmitters[i].setAmp(255/2/mEmitters.size());
 }
 
 void WavePool::setColor(unsigned char c)
@@ -132,34 +145,45 @@ void WavePool::addWL(Uint amt)
 {
 	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].setWLen(aCOf(mEmitters[mSelectedIndex].getWLen(), amt));
+	printf("Wavelength: %upx\n", mEmitters[mSelectedIndex].getWLen());
 }
 void WavePool::rmWL(Uint amt)
 {
 	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].setWLen(sCOf(mEmitters[mSelectedIndex].getWLen(), amt));
+	printf("Wavelength: %upx\n", mEmitters[mSelectedIndex].getWLen());
 }
 
 void WavePool::addAmp(Uint amt)
 {
 	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].setAmp(aCOf(mEmitters[mSelectedIndex].getAmp(), amt));
+	printf("Amplitude: %u\n", mEmitters[mSelectedIndex].getAmp());
 }
 
 void WavePool::rmAmp(Uint amt)
 {
 	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].setAmp(sCOf(mEmitters[mSelectedIndex].getAmp(), amt));
+	printf("Amplitude: %u\n", mEmitters[mSelectedIndex].getAmp());
 }
 
 void WavePool::addSpd(Uint amt)
 {
 	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].setSpeed(aCOf(mEmitters[mSelectedIndex].getSpeed(), amt));
+	printf("Speed: %upx/s\n", mEmitters[mSelectedIndex].getSpeed());
 }
 
 void WavePool::rmSpd(Uint amt)
 {
 	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].setSpeed(sCOf(mEmitters[mSelectedIndex].getSpeed(), amt));
+	printf("Speed: %upx/s\n", mEmitters[mSelectedIndex].getSpeed());
 }
 
+void WavePool::togglePause()
+{
+	if(mSelectedIndex==mEmitters.size()) return;
+	mEmitters[mSelectedIndex].togglePause();
+}
