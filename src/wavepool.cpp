@@ -1,38 +1,33 @@
 #include "wavepool.h"
 
 WavePool::WavePool(Uint w, Uint h) :
-	img(w, h), mWidth(w), mHeight(h), mNumEmitters(2), mSelectedIndex(mNumEmitters)
+	img(w, h), mWidth(w), mHeight(h), mSelectedIndex(0)
 {
-	mEmitters = new Emitter[mNumEmitters];
-	mEmitters[0].init(255/4, 100, 100, 100, 100, w, h);
-	mEmitters[1].init(255/4, 100, 100, 500, 500, w, h);
 }
 
 WavePool::~WavePool()
 {
-	for(Uint i=0; i<mNumEmitters; i++)
+	for(Uint i=0; i<mEmitters.size(); i++)
 		mEmitters[i].destroy();
-	delete[] mEmitters;
 }
 
 Image *WavePool::getNewImage()
 {
 	Uint iy, ix, i, x, y;
 	Color c;
-	int8_t sum;
 
-	#pragma omp parallel for default(shared) private(iy, ix, i, c, sum)
+	#pragma omp parallel for default(shared) private(iy, ix, i, c)
 	for(iy=0; iy<mHeight; iy++)
 		for(ix=0; ix<mWidth; ix++)
 		{
 			c.r = c.g = c.b = 255/2;
-			for(i=0; i<mNumEmitters; i++)
+			for(i=0; i<mEmitters.size(); i++)
 				c.v[mEmitters[i].color] += mEmitters[i].calcWave(ix, iy);
 			img.setPixel(ix, iy, c);
 		}
 	c.r = c.g = c.b = (unsigned char)255;
 	#pragma omp parallel for default(shared) private(i, x, y, ix, iy)
-	for(i=0; i<mNumEmitters; i++)
+	for(i=0; i<mEmitters.size(); i++)
 	{
 		x = mEmitters[i].getX();
 		y = mEmitters[i].getY();
@@ -53,7 +48,7 @@ Image *WavePool::getNewImage()
 void WavePool::update(Uint dt)
 {
 	#pragma omp parallel for
-	for(Uint i=0; i<mNumEmitters; i++)
+	for(Uint i=0; i<mEmitters.size(); i++)
 		mEmitters[i].addTime(dt);
 }
 
@@ -61,7 +56,7 @@ void WavePool::resize(Uint w, Uint h)
 {
 	img.resizeNoCopy(w, h);
 	#pragma omp parallel for
-	for(Uint i=0; i<mNumEmitters; i++)
+	for(Uint i=0; i<mEmitters.size(); i++)
 	{
 		Float x = mEmitters[i].getX();
 		Float y = mEmitters[i].getY();
@@ -79,7 +74,7 @@ void WavePool::resize(Uint w, Uint h)
 void WavePool::select(Vector2 *p)
 {
 	Float distRecord = (Float)(mHeight > mWidth ? mHeight : mWidth);
-	for(Uint i=0; i<mNumEmitters; i++)
+	for(Uint i=0; i<mEmitters.size(); i++)
 	{
 		Float d = p->distance(mEmitters[i].getPos());
 		if(d<distRecord)
@@ -89,16 +84,26 @@ void WavePool::select(Vector2 *p)
 		}
 	}
 	if(distRecord > 10.)
-		mSelectedIndex = mNumEmitters;
+		mSelectedIndex = mEmitters.size();
 }
 void WavePool::move(Vector2 *p)
 {
-	if(mSelectedIndex==mNumEmitters) return;
+	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].setPos((Uint)p->x, ((Uint)p->y));
 }
 
 void WavePool::add(Vector2 *p)
 {
+	mEmitters.emplace_back();
+	mSelectedIndex = mEmitters.size()-1;
+	mEmitters[mSelectedIndex].init(100, 100, 100, p->x, p->y, mWidth, mHeight);
+}
+
+void WavePool::remove()
+{
+	if(mSelectedIndex==mEmitters.size()) return;
+	mEmitters[mSelectedIndex].destroy();
+	mEmitters.erase(mEmitters.begin()+mSelectedIndex);
 }
 
 void WavePool::varWL(int amt)

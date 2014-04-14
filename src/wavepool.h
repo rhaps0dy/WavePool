@@ -13,8 +13,7 @@ private:
 	Image img;
 	Uint mWidth, mHeight;
 
-	Uint mNumEmitters;
-	Emitter *mEmitters;
+	std::vector<Emitter> mEmitters;
 
 	Uint mSelectedIndex;
 
@@ -31,6 +30,7 @@ public:
 	void select(Vector2 *p);
 	void move(Vector2 *p);
 	void add(Vector2 *p);
+	void remove();
 	void varWL(int amt);
 	void varAmp(int amt);
 	void varSpd(int amt);
