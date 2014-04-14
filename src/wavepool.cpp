@@ -106,19 +106,60 @@ void WavePool::remove()
 	mEmitters.erase(mEmitters.begin()+mSelectedIndex);
 }
 
-void WavePool::varWL(int amt)
-{
-}
-
-void WavePool::varAmp(int amt)
-{
-}
-
-void WavePool::varSpd(int amt)
-{
-}
-
 void WavePool::setColor(unsigned char c)
 {
+	if(mSelectedIndex==mEmitters.size()) return;
+	mEmitters[mSelectedIndex].color = c%3;
+}
+
+//add checking overflow
+static inline Uint aCOf(Uint a, Uint b)
+{
+	b = a+b;
+	if(b<a) b=((Uint)~0);
+	return b;
+}
+
+//subtract checking overflow
+static inline Uint sCOf(Uint a, Uint b)
+{
+	b = a-b;
+	if(b>a) b=((Uint)0);
+	return b;
+}
+
+void WavePool::addWL(Uint amt)
+{
+	if(mSelectedIndex==mEmitters.size()) return;
+	mEmitters[mSelectedIndex].setWLen(aCOf(mEmitters[mSelectedIndex].getWLen(), amt));
+}
+void WavePool::rmWL(Uint amt)
+{
+	if(mSelectedIndex==mEmitters.size()) return;
+	mEmitters[mSelectedIndex].setWLen(sCOf(mEmitters[mSelectedIndex].getWLen(), amt));
+}
+
+void WavePool::addAmp(Uint amt)
+{
+	if(mSelectedIndex==mEmitters.size()) return;
+	mEmitters[mSelectedIndex].setAmp(aCOf(mEmitters[mSelectedIndex].getAmp(), amt));
+}
+
+void WavePool::rmAmp(Uint amt)
+{
+	if(mSelectedIndex==mEmitters.size()) return;
+	mEmitters[mSelectedIndex].setAmp(sCOf(mEmitters[mSelectedIndex].getAmp(), amt));
+}
+
+void WavePool::addSpd(Uint amt)
+{
+	if(mSelectedIndex==mEmitters.size()) return;
+	mEmitters[mSelectedIndex].setSpeed(aCOf(mEmitters[mSelectedIndex].getSpeed(), amt));
+}
+
+void WavePool::rmSpd(Uint amt)
+{
+	if(mSelectedIndex==mEmitters.size()) return;
+	mEmitters[mSelectedIndex].setSpeed(sCOf(mEmitters[mSelectedIndex].getSpeed(), amt));
 }
 

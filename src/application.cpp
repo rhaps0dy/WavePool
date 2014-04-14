@@ -61,6 +61,33 @@ void Application::onKeyPressed( SDL_KeyboardEvent event )
 		case SDLK_d:
 			wp->remove();
 			break;
+		case SDLK_q:
+			wp->addWL(10);
+			break;
+		case SDLK_z:
+			wp->rmWL(10);
+			break;
+		case SDLK_w:
+			wp->addAmp(10);
+			break;
+		case SDLK_x:
+			wp->rmAmp(10);
+			break;
+		case SDLK_e:
+			wp->addSpd(10);
+			break;
+		case SDLK_c:
+			wp->rmSpd(10);
+			break;
+		case SDLK_1:
+			wp->setColor(0);
+			break;
+		case SDLK_2:
+			wp->setColor(1);
+			break;
+		case SDLK_3:
+			wp->setColor(2);
+			break;
 	}
 }
 

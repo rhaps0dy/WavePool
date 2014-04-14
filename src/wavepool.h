@@ -31,9 +31,16 @@ public:
 	void move(Vector2 *p);
 	void add(Vector2 *p);
 	void remove();
-	void varWL(int amt);
-	void varAmp(int amt);
-	void varSpd(int amt);
+
+	void addWL(Uint amt);
+	void rmWL(Uint amt);
+
+	void addAmp(Uint amt);
+	void rmAmp(Uint amt);
+
+	void addSpd(Uint amt);
+	void rmSpd(Uint amt);
+
 	void setColor(unsigned char c);
 };
 

@@ -37,8 +37,8 @@ public:
 	inline Uint getWLen() { return mWLen/1000; }
 	inline Uint getSpeed() { return mSpeed; }
 
-	inline void setAmp(Uint a) { mAmp = a; renewCache();}
-	inline void setWLen(Uint wl) { mWLen = wl*1000; renewCache();}
+	inline void setAmp(Uint a) { mAmp = (1>a ? 1 : a); renewCache();}
+	inline void setWLen(Uint wl) { mWLen = (2>wl ? 2 : wl)*1000; renewCache();}
 	inline void setSpeed(Uint s) { mSpeed = s; }
 
 	inline void setPos(Uint x, Uint y) { mPos.set(x, y); renewDistCache();}
