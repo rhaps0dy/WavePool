@@ -28,7 +28,6 @@ Image *WavePool::getNewImage()
 		}
 	c.g = (unsigned char)255;
 	c.r = c.b = (unsigned char)0;
-	#pragma omp parallel for default(shared) private(i, x, y, ix, iy)
 	for(i=0; i<mEmitters.size(); i++)
 	{
 		x = mEmitters[i].getX();
@@ -49,7 +48,6 @@ Image *WavePool::getNewImage()
 
 void WavePool::update(Uint dt)
 {
-	#pragma omp parallel for
 	for(Uint i=0; i<mEmitters.size(); i++)
 		if(mEmitters[i].running)
 			mEmitters[i].addTime(dt);
@@ -101,7 +99,6 @@ void WavePool::add(Vector2 *p)
 	mEmitters.emplace_back();
 	mSelectedIndex = mEmitters.size()-1;
 	mEmitters[mSelectedIndex].init(100, 100, 100, (Uint)p->x, (Uint)p->y, mWidth, mHeight);
-	#pragma omp parallel for
 	for(Uint i=0; i<mEmitters.size(); i++)
 		mEmitters[i].setAmp(255/2/mEmitters.size());
 	printf("Added emitter in position %u, %u\n", (Uint)p->x, (Uint)p->y);
@@ -114,7 +111,6 @@ void WavePool::remove()
 	mEmitters.erase(mEmitters.begin()+mSelectedIndex);
 	printf("Removed emitter %u\n", mSelectedIndex);
 	mSelectedIndex = mEmitters.size();
-	#pragma omp parallel for
 	for(Uint i=0; i<mEmitters.size(); i++)
 		mEmitters[i].setAmp(255/2/mEmitters.size());
 }
