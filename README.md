@@ -1,13 +1,25 @@
 WavePool
 ========
 
-First project for the 2014 Infografia course. A 'pool' of sine wave emitters.
+Primer proyecto para el curso de Infografía 2014. Una "piscina" de ondas senoidales.
 
-Building
-========
+Controles
+---------
 
-Standard CMake procedure. You'll need SDL2 and OpenGL. CMake config script for
-SDL2 is already provided.
+A 		- Añadir emisor bajo el cursor
+D		- Borrar emisor seleccionado
+Click derecho	- Seleccionar emisor / deseleccionar emisor si se clica lejos.
+Click izquierdo - Mover emisor seleccionado
+Q / Z		- Longitud de onda + / -
+W / X		- Amplitud + / - (puede haber overflow de color)
+E / C		- Velocidad de propagación + / -
+P		- Pausar / continuar tiempo del emisor seleccionado
+
+Compilación
+-----------
+
+Procedimiento estándar de CMake. Se necesitan SDL2 y OpenGL. Script de configuración
+para SDL2 de CMake en el repositorio.
 
 ```bash
 mkdir build
@@ -16,8 +28,21 @@ cmake-gui .. #now configure your variables
 make
 ```
 
-The only installed file is the executable so you really don't need to specify an installation directory.
-The executable is under src/WavePool in the build directory.
+El ejecutable está en "<build_dir>/src/Wavepool", o en el directorio base si se corre
+"make install".
 
-Build tested with clang++ on FreeBSD, OS X and with g++ on GNU/Linux, but it probably works with MSVC++,
-Cygwin and MinGW.
+Build comprobada con clang++ en FreeBSD y OS X y con g++ en GNU/Linux. Debería funcionar
+en MSVC++ ya que CMake puede generar proyectos, pero no lo he probado. Aún así,
+funciona mejor en compiladores con soporte para OpenMP (principalmente g++) ya que se
+añade multithreading.
+
+Problemas encontrados durante el desarrollo
+-------------------------------------------
+
+El problema principal de éste programa es la lentitud. Calcular la distancia a todos
+los píxeles para cada onda senoidal es muy costoso, y calcular la onda senoidal no tanto
+pero también. Así que lo cacheé en memoria, se utilizan un par de MB más de memoria pero
+el procesador está bastante menos cargado. En cada frame sólo se debe comprobar el tiempo,
+mirar la distancia en una tabla, y mirar el resultado en otra. Para cada píxel.
+
+Por alguna razón, dibujar sólo el fondo sin ningún emisor también es bastante costoso.
