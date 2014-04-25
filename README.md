@@ -7,12 +7,19 @@ Controles
 ---------
 
 A 		- Añadir emisor bajo el cursor
+
 D		- Borrar emisor seleccionado
+
 Click derecho	- Seleccionar emisor / deseleccionar emisor si se clica lejos.
+
 Click izquierdo - Mover emisor seleccionado
+
 Q / Z		- Longitud de onda + / -
+
 W / X		- Amplitud + / - (puede haber overflow de color)
+
 E / C		- Velocidad de propagación + / -
+
 P		- Pausar / continuar tiempo del emisor seleccionado
 
 Compilación
