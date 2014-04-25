@@ -18,9 +18,9 @@ const Color Color::PURPLE(255,0,255);
 
 void Color::operator = (const Vector3& v)
 {
-	r = clamp( (unsigned char)v.x,0,255);
-	g = clamp( (unsigned char)v.y,0,255);
-	b = clamp( (unsigned char)v.z,0,255);
+	r = clamp<unsigned char>( (unsigned char)v.x,0,255);
+	g = clamp<unsigned char>( (unsigned char)v.y,0,255);
+	b = clamp<unsigned char>( (unsigned char)v.z,0,255);
 }
 
 //**************************************

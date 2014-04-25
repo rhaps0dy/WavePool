@@ -30,6 +30,8 @@
 //OpenGL
 //#include <GL/glu.h> //including GLUT we include everything (opengl, glu and glut)
 
+#include <stdint.h>
+
 //used to access opengl extensions
 //void* getGLProcAddress(const char*);
 #define REGISTER_GLEXT(RET, FUNCNAME, ...) typedef RET (APIENTRY * FUNCNAME ## _func)(__VA_ARGS__); FUNCNAME ## _func FUNCNAME = NULL;

@@ -15,15 +15,16 @@ Image *WavePool::getNewImage()
 {
 	Uint iy, ix, i, x, y;
 	Color c;
+	int val;
 
-	#pragma omp parallel for default(shared) private(iy, ix, i, c)
+	#pragma omp parallel for default(shared) private(iy, ix, i, c, val)
 	for(iy=0; iy<mHeight; iy++)
 		for(ix=0; ix<mWidth; ix++)
 		{
-			c.r = 255/2;
+			val = 0;
 			for(i=0; i<mEmitters.size(); i++)
-				c.r += mEmitters[i].calcWave(ix, iy);
-			c.g = c.b = c.r;
+				val += mEmitters[i].calcWave(ix, iy);
+			c.g = c.b = c.r = (uint8_t)clamp<int>(val+255/2, 0, 255);
 			img.setPixel(ix, iy, c);
 		}
 	c.g = (unsigned char)255;

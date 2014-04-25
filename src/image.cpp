@@ -232,9 +232,9 @@ bool Image::saveTGA(const char* filename)
 		{
 			Color c = pixels[(height-y-1)*width+x];
 			unsigned int pos = (y*width+x)*3;
-			bytes[pos+2] = clamp((unsigned char)(c.r * 255),0,255);
-			bytes[pos+1] = clamp((unsigned char)(c.g * 255),0,255);
-			bytes[pos] = clamp((unsigned char)(c.b * 255),0,255);
+			bytes[pos+2] = clamp<unsigned char>((unsigned char)(c.r * 255),0,255);
+			bytes[pos+1] = clamp<unsigned char>((unsigned char)(c.g * 255),0,255);
+			bytes[pos] = clamp<unsigned char>((unsigned char)(c.b * 255),0,255);
 		}
 
 	fwrite(bytes, 1, width*height*3, file);

@@ -23,10 +23,8 @@ typedef float Float;
 //save us some typing
 typedef unsigned int Uint;
 
-//clamp a value 'x' between 'a' and 'b'
-inline Float clamp(Float x, Float a, Float b) { return x < a ? a : (x > b ? b : x); }
-inline unsigned int clamp(unsigned int x, unsigned int a, unsigned int b) { return x < a ? a : (x > b ? b : x); }
-inline unsigned char clamp(unsigned char x, unsigned char a, unsigned char b) { return x < a ? a : (x > b ? b : x); }
+template<typename T>
+inline T clamp(T x, T a, T b) { return x < a ? a : (x > b ? b : x); }
 
 inline static Uint isqrt(Uint root)
 {
@@ -69,7 +67,7 @@ public:
 	Color(Float r, Float g, Float b) { this->r = (unsigned char)r; this->g = (unsigned char)g; this->b = (unsigned char)b; }
 	void operator = (const Vector3& v);
 
-	void set(Float r, Float g, Float b) { this->r = (unsigned char)clamp(r,0.0,255.0); this->g = (unsigned char)clamp(g,0.0,255.0); this->b = (unsigned char)clamp(b,0.0,255.0); }
+	void set(Float r, Float g, Float b) { this->r = (unsigned char)clamp<Float>(r,0.0,255.0); this->g = (unsigned char)clamp<Float>(g,0.0,255.0); this->b = (unsigned char)clamp<Float>(b,0.0,255.0); }
 	void random() { r = rand() % 255; g = rand() % 255; b = rand() % 255; }
 
 	Color operator * (Float v) { return Color((unsigned char)(r*v), (unsigned char)(g*v), (unsigned char)(b*v)); }

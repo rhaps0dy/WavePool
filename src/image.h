@@ -46,14 +46,14 @@ public:
 	Color getPixel(unsigned int x, unsigned int y) const { return pixels[ y * width + x ]; }
 	Color& getPixelRef(unsigned int x, unsigned int y)	{ return pixels[ y * width + x ]; }
 	Color getPixelSafe(unsigned int x, unsigned int y) const {
-		x = clamp((unsigned int)x, 0, width-1);
-		y = clamp((unsigned int)y, 0, height-1);
+		x = clamp<unsigned int>((unsigned int)x, 0, width-1);
+		y = clamp<unsigned int>((unsigned int)y, 0, height-1);
 		return pixels[ y * width + x ];
 	}
 
 	//set the pixel at position x,y with value C
 	inline void setPixel(unsigned int x, unsigned int y, Color c) { pixels[ y * width + x ] = c; }
-	inline void setPixelSafe(unsigned int x, unsigned int y, Color c) const { x = clamp(x, 0, width-1); y = clamp(y, 0, height-1); pixels[ y * width + x ] = c; }
+	inline void setPixelSafe(unsigned int x, unsigned int y, Color c) const { x = clamp<unsigned int>(x, 0, width-1); y = clamp<unsigned int>(y, 0, height-1); pixels[ y * width + x ] = c; }
 
 	void resize(unsigned int width, unsigned int height);
 	void resizeNoCopy(unsigned int width, unsigned int height);

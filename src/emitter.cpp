@@ -38,7 +38,7 @@ void Emitter::renewCache()
 		if(res < -128. || res > 127.)
 		{
 			printf("WARNING: Sine wave result exceeds int8_t boundaries\n");
-			res = clamp(res, -128., 127.);
+			res = clamp<Float>(res, -128., 127.);
 		}
 #endif //DEBUG
 		mWCache[i] = (int8_t)(res);
