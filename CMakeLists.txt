@@ -8,6 +8,12 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g")
 add_definitions("-std=c++11 -Wall -I/usr/local/include")
 
+string(COMPARE EQUAL "${CMAKE_BUILD_TYPE}" "" SET_RELEASE)
+
+if(SET_RELEASE)
+	set(CMAKE_BUILD_TYPE RELEASE)
+endif(SET_RELEASE)
+
 # Find the SDL2 configuration file
 set(SDL2_DIR ${CMAKE_SOURCE_DIR})
 

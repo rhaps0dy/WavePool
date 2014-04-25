@@ -46,3 +46,7 @@ el procesador está bastante menos cargado. En cada frame sólo se debe comprobar 
 mirar la distancia en una tabla, y mirar el resultado en otra. Para cada píxel.
 
 Por alguna razón, dibujar sólo el fondo sin ningún emisor también es bastante costoso.
+
+También obtuve mejor rendimiento volviendo inline el método setPixel de Image, y poniendo
+threads OpenMP en algunos fors particularmente largos (el de renderizar y el de recachear
+ondas senoidales cuando se cambia el tamaño de la ventana).
