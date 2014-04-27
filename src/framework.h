@@ -78,6 +78,8 @@ public:
 	void operator += (const Color& v) { r += v.r; g += v.g; b += v.b; }
 	Color operator - (const Color& v) { return Color((Float)(r-v.r), (Float)(g-v.g), (Float)(b-v.b)); }
 	void operator -= (const Color& v) { r -= v.r; g -= v.g; b -= v.b; }
+	bool operator != (const Color &c) { return (r!=c.r || g!=c.g || b!=c.b); }
+	bool operator == (const Color &c) { return (r==c.r && g==c.g && b==c.b); }
 
 	//some colors to help
 	static const Color WHITE;
@@ -89,6 +91,8 @@ public:
 	static const Color CYAN;
 	static const Color YELLOW;
 	static const Color PURPLE;
+
+	Color getComplementary();
 };
 
 inline Color operator * (const Color& c, Float v) { return Color((unsigned char)(c.r*v), (unsigned char)(c.g*v), (unsigned char)(c.b*v)); }

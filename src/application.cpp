@@ -4,7 +4,7 @@
 #include "readme.h"
 
 Application::Application(const char* caption, int width, int height) :
-	doMove(false)
+	doMove(false), colorSelectorHeight(30)
 {
 	this->window = createWindow(caption, width, height);
 
@@ -24,13 +24,16 @@ void Application::init(void)
 {
 	showREADME();
 	img = new Image(window_width, window_height);
-	wp = new WavePool(window_width, window_height - window_height/5);
+	wp = new WavePool(window_width, window_height - colorSelectorHeight);
+	colSel = new ColorSelect(0, window_height - colorSelectorHeight, window_width, window_height);
+	colSel->paintOn(img);
 }
 
 Application::~Application()
 {
 	delete img;
 	delete wp;
+	delete colSel;
 }
 
 //render one frame
@@ -93,6 +96,13 @@ void Application::onKeyPressed( SDL_KeyboardEvent event )
 //mouse button event
 void Application::onMouseButtonDown( SDL_MouseButtonEvent event )
 {
+	Color c = colSel->getColor(&mouse_position);
+	if(c!=ColorSelect::NONE)
+	{
+		wp->setColor(&c);
+		return;
+	}
+
 	if (event.button == SDL_BUTTON_RIGHT)
 		wp->select(&mouse_position);
 	else if(event.button == SDL_BUTTON_LEFT)
@@ -117,5 +127,7 @@ void Application::setWindowSize(int width, int height)
 	window_width = width;
 	window_height = height;
 	img->resizeNoCopy(width, height);
-	wp->resize(width, height - height/5);
+	wp->resize(width, height - colorSelectorHeight);
+	colSel->setCoords(0, window_height - colorSelectorHeight, window_width, window_height);
+	colSel->paintOn(img);
 }

@@ -1,8 +1,9 @@
 #include "wavepool.h"
 
 WavePool::WavePool(Uint w, Uint h) :
-	mWidth(w), mHeight(h), mSelectedIndex(0)
+	mWidth(w), mHeight(h), mSelectedIndex(0), color(Color::WHITE)
 {
+	complementary = color.getComplementary();
 }
 
 WavePool::~WavePool()
@@ -28,11 +29,12 @@ void WavePool::generateNewImage(Image *img)
 			val = 0;
 			for(i=0; i<mEmitters.size(); i++)
 				val += mEmitters[i].calcWave(ix, iy);
-			c.g = c.b = c.r = (uint8_t)clamp<int>(val+255/2, 0, 255);
+			//use val and y as auxiliar values
+			val = clamp<int>(val+255/2, 0, 255);
+			for(y=0; y<3; y++)
+				if(color.v[y]) c.v[y] = (uint8_t)val;
 			img->setPixel(ix, iy, c);
 		}
-	c.g = (unsigned char)255;
-	c.r = c.b = (unsigned char)0;
 	for(i=0; i<mEmitters.size(); i++)
 	{
 		x = mEmitters[i].getX();
@@ -41,13 +43,13 @@ void WavePool::generateNewImage(Image *img)
 		{
 			for(ix=LIMITZERO(x); ix<=LIMITTO(x, mWidth); ix++)
 				for(iy=LIMITZERO(y); iy<=LIMITTO(y, mHeight); iy++)
-					img->setPixel(ix, iy, c);
+					img->setPixel(ix, iy, complementary);
 			continue;
 		}
 		for(ix=LIMITZERO(x); ix<=LIMITTO(x, mWidth); ix++)
-			img->setPixel(ix, y, c);
+			img->setPixel(ix, y, complementary);
 		for(iy=LIMITZERO(y); iy<=LIMITTO(y, mHeight); iy++)
-			img->setPixel(x, iy, c);
+			img->setPixel(x, iy, complementary);
 	}
 }
 
@@ -125,9 +127,10 @@ void WavePool::remove()
 	mSelectedIndex = mEmitters.size();
 }
 
-void WavePool::setColor(uint8_t r, uint8_t g, uint8_t b)
+void WavePool::setColor(Color *c)
 {
-	;
+	color = *c;
+	complementary = color.getComplementary();
 }
 
 //add checking overflow

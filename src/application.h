@@ -9,6 +9,7 @@
 #include "framework.h"
 #include "image.h"
 #include "wavepool.h"
+#include "colorselect.h"
 
 class Application
 {
@@ -24,6 +25,11 @@ public:
 	WavePool *wp;
 	//world renderer image
 	Image *img;
+	//color selector
+	ColorSelect *colSel;
+
+
+	Uint colorSelectorHeight;
 
 #ifdef APP_TIME_ENABLED
 	Uint time;

@@ -15,7 +15,8 @@ private:
 	std::vector<Emitter> mEmitters;
 
 	Uint mSelectedIndex;
-
+	Color color;
+	Color complementary;
 public:
 
 	WavePool(Uint w, Uint h);
@@ -42,7 +43,7 @@ public:
 
 	void togglePause();
 
-	void setColor(uint8_t r, uint8_t g, uint8_t b);
+	void setColor(Color *c);
 };
 
 #endif //_wavepool_h_

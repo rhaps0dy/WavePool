@@ -16,6 +16,12 @@ const Color Color::YELLOW(255,255,0);
 const Color Color::CYAN(0,255,255);
 const Color Color::PURPLE(255,0,255);
 
+Color Color::getComplementary()
+{
+	if(*this == WHITE) return GREEN;
+	return Color(~r, ~g, ~b);
+}
+
 void Color::operator = (const Vector3& v)
 {
 	r = clamp<unsigned char>( (unsigned char)v.x,0,255);
