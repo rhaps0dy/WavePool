@@ -1,6 +1,7 @@
 #include "application.h"
 #include "utils.h"
 #include "image.h"
+#include "readme.h"
 
 Application::Application(const char* caption, int width, int height) :
 	doMove(false)
@@ -21,6 +22,7 @@ Application::Application(const char* caption, int width, int height) :
 //Here we have already GL working, so we can create meshes and textures
 void Application::init(void)
 {
+	showREADME();
 	wp = new WavePool(window_width, window_height);
 }
 

@@ -20,7 +20,7 @@ private:
 	//Accumulated time
 	Uint mTimeAcc;
 	//cached wave function. We cache T/2, with 1px resolution approx
-	int8_t *mWCache;
+	int *mWCache;
 	Uint mWCacheLen;
 	//2*mWCacheLen
 	Uint mWCacheLen_2;
@@ -53,7 +53,7 @@ public:
 
 	inline void addTime(Uint dt) { mTimeAcc = (dt*mSpeed+mTimeAcc)%mWLen; }
 	inline void invertPhase() { addTime((Uint)((Float)mWLen)/((Float)mSpeed)/2.); }
-	int8_t calcWave(Uint x, Uint y);
+	int calcWave(Uint x, Uint y);
 	void resize(Uint w, Uint h);
 	void renewDistCache();
 	void togglePause() { running = !running; }

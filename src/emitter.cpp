@@ -28,7 +28,7 @@ void Emitter::renewCache()
 {
 	mWCacheLen = getWLen()/2;
 	if(mWCache) free(mWCache);
-	mWCache = (int8_t *) malloc(mWCacheLen*sizeof(int8_t));
+	mWCache = (int *) malloc(mWCacheLen*sizeof(int));
 	Float step = PI/((Float)mWCacheLen);
 	Float res;
 	for(Uint i=0; i<mWCacheLen; i++)
@@ -41,12 +41,12 @@ void Emitter::renewCache()
 			res = clamp<Float>(res, -128., 127.);
 		}
 #endif //DEBUG
-		mWCache[i] = (int8_t)(res);
+		mWCache[i] = (int)(res);
 	}
 	mWCacheLen_2 = mWCacheLen<<1;
 }
 
-int8_t Emitter::calcWave(Uint x, Uint y)
+int Emitter::calcWave(Uint x, Uint y)
 {
 	Uint d;
 	//we add mwCacheLen_2 to avoid d from possibly warping to negative

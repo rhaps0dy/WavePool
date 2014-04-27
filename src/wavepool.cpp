@@ -97,11 +97,9 @@ void WavePool::move(Vector2 *p)
 
 void WavePool::add(Vector2 *p)
 {
-	mEmitters.emplace_back();
+	mEmitters.push_back(Emitter());
 	mSelectedIndex = mEmitters.size()-1;
 	mEmitters[mSelectedIndex].init(100, 100, 100, (Uint)p->x, (Uint)p->y, mWidth, mHeight);
-	for(Uint i=0; i<mEmitters.size(); i++)
-		mEmitters[i].setAmp(255/2/mEmitters.size());
 	printf("Added emitter in position %u, %u\n", (Uint)p->x, (Uint)p->y);
 }
 
@@ -112,8 +110,6 @@ void WavePool::remove()
 	mEmitters.erase(mEmitters.begin()+mSelectedIndex);
 	printf("Removed emitter %u\n", mSelectedIndex);
 	mSelectedIndex = mEmitters.size();
-	for(Uint i=0; i<mEmitters.size(); i++)
-		mEmitters[i].setAmp(255/2/mEmitters.size());
 }
 
 void WavePool::setColor(unsigned char c)
