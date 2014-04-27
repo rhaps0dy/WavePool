@@ -53,9 +53,9 @@ void WavePool::generateNewImage(Image *img)
 	}
 }
 
-#undef MIN(X, Y)
-#undef LIMITZERO(X)
-#undef LIMITTO(X, W)
+#undef MIN
+#undef LIMITZERO
+#undef LIMITTO
 
 void WavePool::update(Uint dt)
 {
