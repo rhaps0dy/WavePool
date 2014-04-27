@@ -104,7 +104,9 @@ void WavePool::move(Vector2 *p)
 	Uint y = (Uint)p->y;
 	if(x >= mWidth || y >= mHeight) return;
 	mEmitters[mSelectedIndex].setPos(x, y);
+#ifdef PRINT_CHANGES
 	printf("Position %u, %u\n", x, y);
+#endif
 }
 
 void WavePool::add(Vector2 *p)
@@ -115,7 +117,9 @@ void WavePool::add(Vector2 *p)
 	mEmitters.push_back(Emitter());
 	mSelectedIndex = mEmitters.size()-1;
 	mEmitters[mSelectedIndex].init(100, 100, 100, (Uint)p->x, (Uint)p->y, mWidth, mHeight);
+#ifdef PRINT_CHANGES
 	printf("Added emitter in position %u, %u\n", (Uint)p->x, (Uint)p->y);
+#endif
 }
 
 void WavePool::remove()
@@ -123,7 +127,9 @@ void WavePool::remove()
 	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].destroy();
 	mEmitters.erase(mEmitters.begin()+mSelectedIndex);
+#ifdef PRINT_CHANGES
 	printf("Removed emitter %u\n", mSelectedIndex);
+#endif
 	mSelectedIndex = mEmitters.size();
 }
 
@@ -153,41 +159,54 @@ void WavePool::addWL(Uint amt)
 {
 	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].setWLen(aCOf(mEmitters[mSelectedIndex].getWLen(), amt));
+#ifdef PRINT_CHANGES
 	printf("Wavelength: %upx\n", mEmitters[mSelectedIndex].getWLen());
+#endif
 }
+
 void WavePool::rmWL(Uint amt)
 {
 	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].setWLen(sCOf(mEmitters[mSelectedIndex].getWLen(), amt));
+#ifdef PRINT_CHANGES
 	printf("Wavelength: %upx\n", mEmitters[mSelectedIndex].getWLen());
+#endif
 }
 
 void WavePool::addAmp(Uint amt)
 {
 	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].setAmp(aCOf(mEmitters[mSelectedIndex].getAmp(), amt));
+#ifdef PRINT_CHANGES
 	printf("Amplitude: %u\n", mEmitters[mSelectedIndex].getAmp());
+#endif
 }
 
 void WavePool::rmAmp(Uint amt)
 {
 	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].setAmp(sCOf(mEmitters[mSelectedIndex].getAmp(), amt));
+#ifdef PRINT_CHANGES
 	printf("Amplitude: %u\n", mEmitters[mSelectedIndex].getAmp());
+#endif
 }
 
 void WavePool::addSpd(Uint amt)
 {
 	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].setSpeed(aCOf(mEmitters[mSelectedIndex].getSpeed(), amt));
+#ifdef PRINT_CHANGES
 	printf("Speed: %upx/s\n", mEmitters[mSelectedIndex].getSpeed());
+#endif
 }
 
 void WavePool::rmSpd(Uint amt)
 {
 	if(mSelectedIndex==mEmitters.size()) return;
 	mEmitters[mSelectedIndex].setSpeed(sCOf(mEmitters[mSelectedIndex].getSpeed(), amt));
+#ifdef PRINT_CHANGES
 	printf("Speed: %upx/s\n", mEmitters[mSelectedIndex].getSpeed());
+#endif
 }
 
 void WavePool::togglePause()

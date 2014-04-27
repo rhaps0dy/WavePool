@@ -6,21 +6,21 @@ Primer proyecto para el curso de Infografía 2014. Una "piscina" de ondas senoida
 Controles
 ---------
 
-A 		- Añadir emisor bajo el cursor
+A 				- Añadir emisor bajo el cursor
 
-D		- Borrar emisor seleccionado
+D				- Borrar emisor seleccionado
 
-Click derecho	- Seleccionar emisor / deseleccionar emisor si se clica lejos.
+Click			- Seleccionar un emisor
 
-Click izquierdo - Mover emisor seleccionado
+Arrastrar ratón	- Mover el emisor seleccionado
 
-Q / Z		- Longitud de onda + / -
+Q / Z			- Longitud de onda + / -
 
-W / X		- Amplitud + / - (puede haber overflow de color)
+W / X			- Amplitud + / - (puede haber overflow de color)
 
-E / C		- Velocidad de propagación + / -
+E / C			- Velocidad de propagación + / -
 
-P		- Pausar / continuar tiempo del emisor seleccionado
+P				- Pausar / continuar tiempo del emisor seleccionado
 
 Compilación
 -----------
@@ -57,3 +57,12 @@ Por alguna razón, dibujar sólo el fondo sin ningún emisor también es bastante co
 También obtuve mejor rendimiento volviendo inline el método setPixel de Image, y poniendo
 threads OpenMP en algunos fors particularmente largos (el de renderizar y el de recachear
 ondas senoidales cuando se cambia el tamaño de la ventana).
+
+Cambios en la última versión
+----------------------------
+
+- El overflow ya no suele ser un problema (se puede llegar al menos de -2^15 a 2^15-1, en
+la mayoría de máquinas aún más)
+- Puedes elegir el color de las ondas con el selector en la parte superior de la pantalla
+- Puedes arrastrar y mover con un sólo botón, el esquema anterior era confuso.
+- Los controles se ponen por pantalla al arrancar

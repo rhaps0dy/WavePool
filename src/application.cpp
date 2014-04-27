@@ -103,16 +103,13 @@ void Application::onMouseButtonDown( SDL_MouseButtonEvent event )
 		return;
 	}
 
-	if (event.button == SDL_BUTTON_RIGHT)
-		wp->select(&mouse_position);
-	else if(event.button == SDL_BUTTON_LEFT)
-		doMove = true;
+	wp->select(&mouse_position);
+	doMove = true;
 }
 
 void Application::onMouseButtonUp( SDL_MouseButtonEvent event )
 {
-	if(event.button == SDL_BUTTON_LEFT)
-		doMove = false;
+	doMove = false;
 }
 
 //when the app starts
