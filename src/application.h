@@ -22,6 +22,8 @@ public:
 
 	//world renderer
 	WavePool *wp;
+	//world renderer image
+	Image *img;
 
 #ifdef APP_TIME_ENABLED
 	Uint time;

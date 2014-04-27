@@ -1,7 +1,7 @@
 #include "wavepool.h"
 
 WavePool::WavePool(Uint w, Uint h) :
-	img(w, h), mWidth(w), mHeight(h), mSelectedIndex(0)
+	mWidth(w), mHeight(h), mSelectedIndex(0)
 {
 }
 
@@ -11,7 +11,11 @@ WavePool::~WavePool()
 		mEmitters[i].destroy();
 }
 
-Image *WavePool::getNewImage()
+#define MIN(X, Y) ((X)<(Y) ? (X) : (Y))
+#define LIMITZERO(X) ((X) - MIN((X), 4))
+#define LIMITTO(X, W) (MIN((X)+4, ((W)-1)))
+
+void WavePool::generateNewImage(Image *img)
 {
 	Uint iy, ix, i, x, y;
 	Color c;
@@ -25,7 +29,7 @@ Image *WavePool::getNewImage()
 			for(i=0; i<mEmitters.size(); i++)
 				val += mEmitters[i].calcWave(ix, iy);
 			c.g = c.b = c.r = (uint8_t)clamp<int>(val+255/2, 0, 255);
-			img.setPixel(ix, iy, c);
+			img->setPixel(ix, iy, c);
 		}
 	c.g = (unsigned char)255;
 	c.r = c.b = (unsigned char)0;
@@ -33,19 +37,23 @@ Image *WavePool::getNewImage()
 	{
 		x = mEmitters[i].getX();
 		y = mEmitters[i].getY();
-		for(ix=x-4; ix<=x+4; ix++)
-			img.setPixel(ix, y, c);
-		for(iy=y-4; iy<=y+4; iy++)
-			img.setPixel(x, iy, c);
 		if(i==mSelectedIndex)
 		{
-			for(ix=x-4; ix<=x+4; ix++)
-				for(iy=y-4; iy<=y+4; iy++)
-					img.setPixelSafe(ix, iy, c);
+			for(ix=LIMITZERO(x); ix<=LIMITTO(x, mWidth); ix++)
+				for(iy=LIMITZERO(y); iy<=LIMITTO(y, mHeight); iy++)
+					img->setPixel(ix, iy, c);
+			continue;
 		}
+		for(ix=LIMITZERO(x); ix<=LIMITTO(x, mWidth); ix++)
+			img->setPixel(ix, y, c);
+		for(iy=LIMITZERO(y); iy<=LIMITTO(y, mHeight); iy++)
+			img->setPixel(x, iy, c);
 	}
-	return &img;
 }
+
+#undef MIN(X, Y)
+#undef LIMITZERO(X)
+#undef LIMITTO(X, W)
 
 void WavePool::update(Uint dt)
 {
@@ -56,7 +64,6 @@ void WavePool::update(Uint dt)
 
 void WavePool::resize(Uint w, Uint h)
 {
-	img.resizeNoCopy(w, h);
 	#pragma omp parallel for
 	for(Uint i=0; i<mEmitters.size(); i++)
 	{
@@ -91,12 +98,18 @@ void WavePool::select(Vector2 *p)
 void WavePool::move(Vector2 *p)
 {
 	if(mSelectedIndex==mEmitters.size()) return;
-	mEmitters[mSelectedIndex].setPos((Uint)p->x, ((Uint)p->y));
-	printf("Position %u, %u\n", (Uint)p->x, (Uint)p->y);
+	Uint x = (Uint)p->x;
+	Uint y = (Uint)p->y;
+	if(x >= mWidth || y >= mHeight) return;
+	mEmitters[mSelectedIndex].setPos(x, y);
+	printf("Position %u, %u\n", x, y);
 }
 
 void WavePool::add(Vector2 *p)
 {
+	Uint x = (Uint)p->x;
+	Uint y = (Uint)p->y;
+	if(x >= mWidth || y >= mHeight) return;
 	mEmitters.push_back(Emitter());
 	mSelectedIndex = mEmitters.size()-1;
 	mEmitters[mSelectedIndex].init(100, 100, 100, (Uint)p->x, (Uint)p->y, mWidth, mHeight);
@@ -112,10 +125,9 @@ void WavePool::remove()
 	mSelectedIndex = mEmitters.size();
 }
 
-void WavePool::setColor(unsigned char c)
+void WavePool::setColor(uint8_t r, uint8_t g, uint8_t b)
 {
-	if(mSelectedIndex==mEmitters.size()) return;
-	mEmitters[mSelectedIndex].color = c%3;
+	;
 }
 
 //add checking overflow

@@ -23,11 +23,13 @@ Application::Application(const char* caption, int width, int height) :
 void Application::init(void)
 {
 	showREADME();
-	wp = new WavePool(window_width, window_height);
+	img = new Image(window_width, window_height);
+	wp = new WavePool(window_width, window_height - window_height/5);
 }
 
 Application::~Application()
 {
+	delete img;
 	delete wp;
 }
 
@@ -37,7 +39,8 @@ void Application::render(void)
 	// Clear the window and the depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	renderImage(wp->getNewImage());
+	wp->generateNewImage(img);
+	renderImage(img);
 
 	//swap between front buffer and back buffer
 	SDL_GL_SwapWindow(this->window);
@@ -84,15 +87,6 @@ void Application::onKeyPressed( SDL_KeyboardEvent event )
 		case SDLK_c:
 			wp->rmSpd(10);
 			break;
-		case SDLK_1:
-			wp->setColor(0);
-			break;
-		case SDLK_2:
-			wp->setColor(1);
-			break;
-		case SDLK_3:
-			wp->setColor(2);
-			break;
 	}
 }
 
@@ -122,5 +116,6 @@ void Application::setWindowSize(int width, int height)
 	glViewport( 0,0, width, height );
 	window_width = width;
 	window_height = height;
-	wp->resize(width, height);
+	img->resizeNoCopy(width, height);
+	wp->resize(width, height - height/5);
 }

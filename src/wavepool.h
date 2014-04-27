@@ -10,7 +10,6 @@
 class WavePool
 {
 private:
-	Image img;
 	Uint mWidth, mHeight;
 
 	std::vector<Emitter> mEmitters;
@@ -22,7 +21,7 @@ public:
 	WavePool(Uint w, Uint h);
 	~WavePool();
 
-	Image *getNewImage();
+	void generateNewImage(Image *img);
 	void update(Uint dt);
 
 	void resize(Uint w, Uint h);
@@ -43,7 +42,7 @@ public:
 
 	void togglePause();
 
-	void setColor(unsigned char c);
+	void setColor(uint8_t r, uint8_t g, uint8_t b);
 };
 
 #endif //_wavepool_h_
