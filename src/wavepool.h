@@ -4,6 +4,7 @@
 #include "emitter.h"
 #include "framework.h"
 #include "image.h"
+#include "includes.h"
 
 #include <vector>
 

@@ -44,6 +44,7 @@ void Application::render(void)
 
 	wp->generateNewImage(img);
 	renderImage(img);
+	colSel->paintOn(img);
 
 	//swap between front buffer and back buffer
 	SDL_GL_SwapWindow(this->window);
@@ -126,5 +127,4 @@ void Application::setWindowSize(int width, int height)
 	img->resizeNoCopy(width, height);
 	wp->resize(width, height - colorSelectorHeight);
 	colSel->setCoords(0, window_height - colorSelectorHeight, window_width, window_height);
-	colSel->paintOn(img);
 }
