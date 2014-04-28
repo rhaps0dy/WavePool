@@ -7,7 +7,7 @@
 class ColorSelect
 {
 private:
-	static constexpr Uint numColors = 7;
+	static const Uint numColors = 7;
 	static const Color colors[numColors];
 
 	Uint x1, y1, x2, y2;

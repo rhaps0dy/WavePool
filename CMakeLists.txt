@@ -9,7 +9,7 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g")
 set(PRINT_CHANGES "NO" CACHE BOOL "Whether to print what changes have been
 made when you change something in the application")
 
-add_definitions("-std=c++11 -Wall -I/usr/local/include")
+add_definitions("-Wall -I/usr/local/include")
 
 string(COMPARE EQUAL "${CMAKE_BUILD_TYPE}" "" EMPTY_BUILD_TYPE)
 if(EMPTY_BUILD_TYPE)
