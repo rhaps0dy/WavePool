@@ -13,6 +13,7 @@ WavePool::~WavePool()
 }
 
 #define MIN(X, Y) ((X)<(Y) ? (X) : (Y))
+#define MAX(X, Y) ((X)>(Y) ? (X) : (Y))
 #define LIMITZERO(X) ((X) - MIN((X), 4))
 #define LIMITTO(X, W) (MIN((X)+4, ((W)-1)))
 
@@ -20,19 +21,24 @@ void WavePool::generateNewImage(Image *img)
 {
 	Uint iy, ix, i, x, y;
 	Color c;
-	int val;
+	Float val, r, g, b;
 
-	#pragma omp parallel for default(shared) private(iy, ix, i, c, val)
+	#pragma omp parallel for default(shared) private(iy, ix, i, c, val, r, g, b)
 	for(iy=0; iy<mHeight; iy++)
 		for(ix=0; ix<mWidth; ix++)
 		{
-			val = 0;
+			r=g=b=0.;
 			for(i=0; i<mEmitters.size(); i++)
-				val += mEmitters[i].calcWave(ix, iy);
-			//use val and y as auxiliar values
-			val = clamp<int>(val+255/2, 0, 255);
-			for(y=0; y<3; y++)
-				if(color.v[y]) c.v[y] = (uint8_t)val;
+			{
+				val = (Float)mEmitters[i].calcWave(ix, iy);
+				c = mEmitters[i].c;
+				r += val*((Float)c.r)/255.;
+				g += val*((Float)c.g)/255.;
+				b += val*((Float)c.b)/255.;
+			}
+			c.r = (unsigned char)(clamp<Float>(r+(((Float)c.r)*.5), 0., 255.));
+			c.g = (unsigned char)(clamp<Float>(g+(((Float)c.g)*.5), 0., 255.));
+			c.b = (unsigned char)(clamp<Float>(b+(((Float)c.b)*.5), 0., 255.));
 			img->setPixel(ix, iy, c);
 		}
 	for(i=0; i<mEmitters.size(); i++)
@@ -54,6 +60,7 @@ void WavePool::generateNewImage(Image *img)
 }
 
 #undef MIN
+#undef MAX
 #undef LIMITZERO
 #undef LIMITTO
 
@@ -117,6 +124,7 @@ void WavePool::add(Pos2 *p)
 	mEmitters.push_back(Emitter());
 	mSelectedIndex = mEmitters.size()-1;
 	mEmitters[mSelectedIndex].init(100, 100, 100, (Uint)p->x, (Uint)p->y, mWidth, mHeight);
+	mEmitters[mSelectedIndex].c = color;
 #ifdef PRINT_CHANGES
 	printf("Added emitter in position %u, %u\n", (Uint)p->x, (Uint)p->y);
 #endif
@@ -137,6 +145,8 @@ void WavePool::setColor(Color *c)
 {
 	color = *c;
 	complementary = color.getComplementary();
+	if(mSelectedIndex==mEmitters.size()) return;
+	mEmitters[mSelectedIndex].c = color;
 }
 
 //add checking overflow

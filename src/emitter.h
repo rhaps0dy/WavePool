@@ -57,6 +57,9 @@ public:
 	void resize(Uint w, Uint h);
 	void renewDistCache();
 	void togglePause() { running = !running; }
+
+	//color attribute
+	Color c;
 };
 
 #endif //_emitter_h_
