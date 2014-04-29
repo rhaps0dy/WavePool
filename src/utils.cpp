@@ -83,7 +83,7 @@ void launchLoop(Application* app)
 	int x,y;
 
 	SDL_GetMouseState(&x,&y);
-	app->mouse_position.set(x,y);
+	app->mouse_position.set(x, y);
 
 #ifdef APP_TIME_ENABLED
 	Uint start_time = SDL_GetTicks();

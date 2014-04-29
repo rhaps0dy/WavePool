@@ -82,12 +82,12 @@ void WavePool::resize(Uint w, Uint h)
 	mHeight = h;
 }
 
-void WavePool::select(Vector2 *p)
+void WavePool::select(Pos2 *p)
 {
 	Float distRecord = (Float)(mHeight > mWidth ? mHeight : mWidth);
 	for(Uint i=0; i<mEmitters.size(); i++)
 	{
-		Float d = p->distance(mEmitters[i].getPos());
+		Float d = distance(p->x, p->y, mEmitters[i].getX(), mEmitters[i].getY());
 		if(d<distRecord)
 		{
 			distRecord = d;
@@ -97,7 +97,7 @@ void WavePool::select(Vector2 *p)
 	if(distRecord > 10.)
 		mSelectedIndex = mEmitters.size();
 }
-void WavePool::move(Vector2 *p)
+void WavePool::move(Pos2 *p)
 {
 	if(mSelectedIndex==mEmitters.size()) return;
 	Uint x = (Uint)p->x;
@@ -109,7 +109,7 @@ void WavePool::move(Vector2 *p)
 #endif
 }
 
-void WavePool::add(Vector2 *p)
+void WavePool::add(Pos2 *p)
 {
 	Uint x = (Uint)p->x;
 	Uint y = (Uint)p->y;

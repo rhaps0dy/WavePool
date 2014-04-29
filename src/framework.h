@@ -8,6 +8,11 @@
 #include <vector>
 #include <cmath>
 #include <cstdlib>
+#include <stdint.h>
+
+#ifdef WIN32
+	#define M_PI_2 (PI/2.)
+#endif
 
 #ifndef PI
 #define PI 3.14159265359
@@ -231,6 +236,7 @@ inline double distance(double x, double y, double x2, double y2) { return sqrt( 
 inline float distance(float x, float y, float x2, float y2) { return sqrtf( (x-x2)*(x-x2) + (y-y2)*(y-y2)); }
 #endif //DOUBLE_PRECISION
 
+
 class Vector3u
 {
 public:
@@ -260,5 +266,19 @@ inline Vector3u operator * (Float v, const Vector3u& c) { return Vector3u((unsig
 
 Float ComputeSignedAngle( Vector2 a, Vector2 b);
 Vector3 RayPlaneCollision( const Vector3& plane_pos, const Vector3& plane_normal, const Vector3& ray_origin, const Vector3& ray_dir );
+
+//position
+class Pos2
+{
+public:
+	union
+	{
+		struct { Uint x,y; };
+		Uint v[2];
+	};
+	Pos2() { x = y = 0; }
+	Pos2(Uint _x, Uint _y) { x=_x; y=_y; }
+	inline void set(Uint _x, Uint _y) { x=_x; y=_y; }
+};
 
 #endif
