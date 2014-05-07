@@ -40,7 +40,7 @@ public:
 
 	//mouse state
 	int mouse_state; //tells which buttons are pressed
-	Vector2 mouse_position; //last mouse position
+	Pos2 mouse_position; //last mouse position
 #ifdef APP_DELTA_ENABLED
 	Vector2 mouse_delta; //mouse movement in the last frame
 #endif //APP_DELTA_ENABLED

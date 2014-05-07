@@ -16,7 +16,7 @@ public:
 	ColorSelect(Uint _x1, Uint _y1, Uint _x2, Uint _y2);
 	void paintOn(Image *img);
 	void setCoords(Uint _x1, Uint _y1, Uint _x2, Uint _y2);
-	Color getColor(Vector2 *p);
+	Color getColor(Pos2 *p);
 };
 
 #endif

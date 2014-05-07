@@ -1,3 +1,5 @@
+Adrià Garriga Alonso (adria.garriga01@estudiant.upf.edu) 158636
+
 WavePool
 ========
 
@@ -66,3 +68,7 @@ la mayoría de máquinas aún más)
 - Puedes elegir el color de las ondas con el selector en la parte superior de la pantalla
 - Puedes arrastrar y mover con un sólo botón, el esquema anterior era confuso.
 - Los controles se ponen por pantalla al arrancar
+
+- Había muchas conversiones de Uint a Float, han sido eliminadas
+- Código compilado con MSVC++
+

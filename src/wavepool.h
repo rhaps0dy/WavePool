@@ -28,9 +28,9 @@ public:
 
 	void resize(Uint w, Uint h);
 
-	void select(Vector2 *p);
-	void move(Vector2 *p);
-	void add(Vector2 *p);
+	void select(Pos2 *p);
+	void move(Pos2 *p);
+	void add(Pos2 *p);
 	void remove();
 
 	void addWL(Uint amt);

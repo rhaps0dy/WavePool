@@ -14,8 +14,13 @@
 //SDL
 #pragma comment(lib, "SDL2.lib")
 #pragma comment(lib, "SDL2main.lib")
-#include <SDL.h>
-#include <SDL_opengl.h>
+#ifdef WIN32
+	#include <SDL2/SDL.h>
+	#include <SDL2/SDL_opengl.h>
+#else
+	#include <SDL.h>
+	#include <SDL_opengl.h>
+#endif
 
 //GLUT
 #ifdef __APPLE__
@@ -29,8 +34,6 @@
 
 //OpenGL
 //#include <GL/glu.h> //including GLUT we include everything (opengl, glu and glut)
-
-#include <stdint.h>
 
 //used to access opengl extensions
 //void* getGLProcAddress(const char*);

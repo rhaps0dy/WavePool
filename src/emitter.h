@@ -16,7 +16,7 @@ private:
 	//transfer speed (px/s)
 	Uint mSpeed;
 	//origin of the wave
-	Vector2 mPos;
+	Pos2 mPos;
 	//Accumulated time
 	Uint mTimeAcc;
 	//cached wave function. We cache T/2, with 1px resolution approx
@@ -43,7 +43,7 @@ public:
 	inline void setSpeed(Uint s) { mSpeed = s; }
 
 	inline void setPos(Uint x, Uint y) { mPos.set(x, y); renewDistCache();}
-	inline Vector2 getPos() { return mPos; }
+	inline Pos2 getPos() { return mPos; }
 	inline Uint getX() { return mPos.x; }
 	inline Uint getY() { return mPos.y; }
 
@@ -57,6 +57,9 @@ public:
 	void resize(Uint w, Uint h);
 	void renewDistCache();
 	void togglePause() { running = !running; }
+
+	//color attribute
+	Color c;
 };
 
 #endif //_emitter_h_

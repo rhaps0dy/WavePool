@@ -52,12 +52,12 @@ void ColorSelect::setCoords(Uint _x1, Uint _y1, Uint _x2, Uint _y2)
 	}
 }
 
-Color ColorSelect::getColor(Vector2 *p)
+Color ColorSelect::getColor(Pos2 *p)
 {
-	Uint y = (Uint)p->y;
+	Uint y = p->y;
 	if(y < y1 || y >= y2) return NONE;
 
-	Uint x = (Uint)p->x;
+	Uint x = p->x;
 	Uint w = (x2-x1)/numColors;
 	x = (x-x1)/w;
 	if(x<numColors) return colors[x];
